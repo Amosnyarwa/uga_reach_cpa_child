@@ -27,11 +27,8 @@ df_c_logic_okay_parents_arrange_child_marriage_not_agree <- df_tool_data %>%
   dplyr::select(starts_with("i.check")) %>% 
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
-if(exists("df_c_logic_okay_parents_arrange_child_marriage_not_agree")){
-  if(nrow(df_c_logic_okay_parents_arrange_child_marriage_not_agree) > 0){
-    logic_seperate_output$df_c_logic_okay_parents_arrange_child_marriage_not_agree <- df_c_logic_okay_parents_arrange_child_marriage_not_agree
-  }
-}
+add_checks_data_to_list(input_list_name = "logic_seperate_output", input_df_name = "df_c_logic_okay_parents_arrange_child_marriage_not_agree")
+
 # okay_parents_arrange_child_marriage_agree_2 -----------------------------
 df_c_logic_okay_parents_arrange_child_marriage_agree <- df_tool_data %>% 
   filter(okay_parents_arrange_child_marriage %in% c("agree", "strongly_agree") &
@@ -54,11 +51,8 @@ df_c_logic_okay_parents_arrange_child_marriage_agree <- df_tool_data %>%
   dplyr::select(starts_with("i.check")) %>% 
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
-if(exists("df_c_logic_okay_parents_arrange_child_marriage_agree")){
-  if(nrow(df_c_logic_okay_parents_arrange_child_marriage_agree) > 0){
-    logic_seperate_output$df_c_logic_okay_parents_arrange_child_marriage_agree <- df_c_logic_okay_parents_arrange_child_marriage_agree
-  }
-}
+add_checks_data_to_list(input_list_name = "logic_seperate_output", input_df_name = "df_c_logic_okay_parents_arrange_child_marriage_agree")
+
 # okay_girl_less_18_years_get_married_not_agree_3 -------------------------
 df_c_logic_okay_girl_get_married_stop_school_once_married <- df_tool_data %>% 
   filter(okay_girl_less_18_years_get_married %in% c("disagree", "strongly_disagree") & 
@@ -80,11 +74,8 @@ df_c_logic_okay_girl_get_married_stop_school_once_married <- df_tool_data %>%
   dplyr::select(starts_with("i.check")) %>% 
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
-if(exists("df_c_logic_okay_girl_get_married_stop_school_once_married")){
-  if(nrow(df_c_logic_okay_girl_get_married_stop_school_once_married) > 0){
-    logic_seperate_output$df_c_logic_okay_girl_get_married_stop_school_once_married <- df_c_logic_okay_girl_get_married_stop_school_once_married
-  }
-}
+add_checks_data_to_list(input_list_name = "logic_seperate_output", input_df_name = "df_c_logic_okay_girl_get_married_stop_school_once_married")
+
 # okay_girl_less_18_years_get_married_not_agree_4 -------------------------
 df_c_logic_okay_girl_get_married_reach_puberty <- df_tool_data %>% 
   filter(okay_girl_less_18_years_get_married %in% c("disagree", "strongly_disagree") & 
@@ -106,11 +97,8 @@ df_c_logic_okay_girl_get_married_reach_puberty <- df_tool_data %>%
   dplyr::select(starts_with("i.check")) %>% 
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
-if(exists("df_c_logic_okay_girl_get_married_reach_puberty")){
-  if(nrow(df_c_logic_okay_girl_get_married_reach_puberty) > 0){
-    logic_seperate_output$df_c_logic_okay_girl_get_married_reach_puberty <- df_c_logic_okay_girl_get_married_reach_puberty
-  }
-}
+add_checks_data_to_list(input_list_name = "logic_seperate_output", input_df_name = "df_c_logic_okay_girl_get_married_reach_puberty")
+
 # okay_girl_less_18_years_get_married_agree_5 -----------------------------
 df_c_logic_okay_girl_get_married_agree_reach_puberty <- df_tool_data %>% 
   filter(okay_girl_less_18_years_get_married %in% c("agree", "strongly_agree") & 
@@ -132,11 +120,8 @@ df_c_logic_okay_girl_get_married_agree_reach_puberty <- df_tool_data %>%
   dplyr::select(starts_with("i.check")) %>% 
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
-if(exists("df_c_logic_okay_girl_get_married_agree_reach_puberty")){
-  if(nrow(df_c_logic_okay_girl_get_married_agree_reach_puberty) > 0){
-    logic_seperate_output$df_c_logic_okay_girl_get_married_agree_reach_puberty <- df_c_logic_okay_girl_get_married_agree_reach_puberty
-  }
-}
+add_checks_data_to_list(input_list_name = "logic_seperate_output", input_df_name = "df_c_logic_okay_girl_get_married_agree_reach_puberty")
+
 # okay_father_mother_to_hit_his_child_agree_but_disagree_reasons_6 --------
 # correction: (okay_parents_hit_child_to_discipline:okay_parents_hit_child_to_displine)
 df_c_logic_hit_child_agree_but_disagree_reasons <- df_tool_data %>%
@@ -161,11 +146,8 @@ df_c_logic_hit_child_agree_but_disagree_reasons <- df_tool_data %>%
   dplyr::select(starts_with("i.check")) %>%
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
-if(exists("df_c_logic_hit_child_agree_but_disagree_reasons")){
-  if(nrow(df_c_logic_hit_child_agree_but_disagree_reasons) > 0){
-    logic_seperate_output$df_c_logic_hit_child_agree_but_disagree_reasons <- df_c_logic_hit_child_agree_but_disagree_reasons
-  }
-}
+add_checks_data_to_list(input_list_name = "logic_seperate_output", input_df_name = "df_c_logic_hit_child_agree_but_disagree_reasons")
+
 # okay_father_mother_to_hit_his_child_disagree_but_agree_reasons_7 --------
 # correction: (okay_parents_hit_child_to_discipline:okay_parents_hit_child_to_displine)
 df_c_logic_hit_child_disagree_but_agree_reasons <- df_tool_data %>%
@@ -190,11 +172,8 @@ df_c_logic_hit_child_disagree_but_agree_reasons <- df_tool_data %>%
   dplyr::select(starts_with("i.check")) %>%
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
-if(exists("df_c_logic_hit_child_disagree_but_agree_reasons")){
-  if(nrow(df_c_logic_hit_child_disagree_but_agree_reasons) > 0){
-    logic_seperate_output$df_c_logic_hit_child_disagree_but_agree_reasons <- df_c_logic_hit_child_disagree_but_agree_reasons
-  }
-}
+add_checks_data_to_list(input_list_name = "logic_seperate_output", input_df_name = "df_c_logic_hit_child_disagree_but_agree_reasons")
+
 # parents_responsible_to_provide_child_8 ----------------------------------
 df_c_logic_parents_responsible_to_provide_child_contradict <- df_tool_data %>% 
   filter(parents_responsible_to_provide_child_enough_food %in% c("strongly_disagree", "disagree"),
@@ -222,11 +201,8 @@ df_c_logic_parents_responsible_to_provide_child_contradict <- df_tool_data %>%
   dplyr::select(starts_with("i.check")) %>% 
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
-if(exists("df_c_logic_parents_responsible_to_provide_child_contradict")){
-  if(nrow(df_c_logic_parents_responsible_to_provide_child_contradict) > 0){
-    logic_seperate_output$df_c_logic_parents_responsible_to_provide_child_contradict <- df_c_logic_parents_responsible_to_provide_child_contradict
-  }
-}
+add_checks_data_to_list(input_list_name = "logic_seperate_output", input_df_name = "df_c_logic_parents_responsible_to_provide_child_contradict")
+
 # frequency_children_get_involved_in_harsh_work_9 -------------------------
 df_c_logic_children_get_involved_in_harsh_work_mismatch <- df_tool_data %>% 
   filter(!is.na(child_labour_economic_types), 
@@ -255,11 +231,8 @@ df_c_logic_children_get_involved_in_harsh_work_mismatch <- df_tool_data %>%
   dplyr::select(starts_with("i.check")) %>% 
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
-if(exists("df_c_logic_children_get_involved_in_harsh_work_mismatch")){
-  if(nrow(df_c_logic_children_get_involved_in_harsh_work_mismatch) > 0){
-    logic_seperate_output$df_c_logic_children_get_involved_in_harsh_work_mismatch <- df_c_logic_children_get_involved_in_harsh_work_mismatch
-  }
-}
+add_checks_data_to_list(input_list_name = "logic_seperate_output", input_df_name = "df_c_logic_children_get_involved_in_harsh_work_mismatch")
+
 # child_labour_economic_types_10 ------------------------------------------
 df_c_logic_child_labour_economic_types <- df_tool_data %>% 
   filter(!is.na(child_labour_economic_types), 
@@ -296,11 +269,8 @@ df_c_logic_child_labour_economic_types <- df_tool_data %>%
   dplyr::select(starts_with("i.check")) %>% 
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = "")) 
 
-if(exists("df_c_logic_child_labour_economic_types")){
-  if(nrow(df_c_logic_child_labour_economic_types) > 0){
-    logic_seperate_output$df_c_logic_child_labour_economic_types <- df_c_logic_child_labour_economic_types
-  }
-}
+add_checks_data_to_list(input_list_name = "logic_seperate_output", input_df_name = "df_c_logic_child_labour_economic_types")
+
 # child_labour_economic_types_harsh_work_11 ------------------------------------------
 df_c_logic_child_labour_economic_types_harsh_work <- df_tool_data %>% 
   filter(!is.na(child_labour_economic_types)) %>% 
@@ -330,11 +300,8 @@ df_c_logic_child_labour_economic_types_harsh_work <- df_tool_data %>%
   dplyr::select(starts_with("i.check")) %>% 
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
-if(exists("df_c_logic_child_labour_economic_types_harsh_work")){
-  if(nrow(df_c_logic_child_labour_economic_types_harsh_work) > 0){
-    logic_seperate_output$df_c_logic_child_labour_economic_types_harsh_work <- df_c_logic_child_labour_economic_types_harsh_work
-  }
-}
+add_checks_data_to_list(input_list_name = "logic_seperate_output", input_df_name = "df_c_logic_child_labour_economic_types_harsh_work")
+
 # child_labour_protection_services_sought_12 ------------------------------------------
 df_c_logic_child_labour_protection_services_sought <- df_tool_data %>% 
   filter(str_detect(string = str_c(c("i_report_it_to_ngo_staff", "i_report_it_to_parasocial_worker", 
@@ -359,11 +326,8 @@ df_c_logic_child_labour_protection_services_sought <- df_tool_data %>%
   dplyr::select(starts_with("i.check")) %>% 
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = "")) 
 
-if(exists("df_c_logic_child_labour_protection_services_sought")){
-  if(nrow(df_c_logic_child_labour_protection_services_sought) > 0){
-    logic_seperate_output$df_c_logic_child_labour_protection_services_sought <- df_c_logic_child_labour_protection_services_sought
-  }
-}
+add_checks_data_to_list(input_list_name = "logic_seperate_output", input_df_name = "df_c_logic_child_labour_protection_services_sought")
+
 # protection_services_for_child_16 ----------------------------------------
 df_c_logic_protection_services_for_child_a <- df_tool_data %>% 
   filter(protection_services_for_child_violence == "no", protection_services_for_child_physical_harm == "yes"
@@ -385,11 +349,8 @@ df_c_logic_protection_services_for_child_a <- df_tool_data %>%
   dplyr::select(starts_with("i.check")) %>% 
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
-if(exists("df_c_logic_protection_services_for_child_a")){
-  if(nrow(df_c_logic_protection_services_for_child_a) > 0){
-    logic_seperate_output$df_c_logic_protection_services_for_child_a <- df_c_logic_protection_services_for_child_a
-  }
-}
+add_checks_data_to_list(input_list_name = "logic_seperate_output", input_df_name = "df_c_logic_protection_services_for_child_a")
+
 # protection_services_for_child_17 ----------------------------------------
 df_c_logic_protection_services_for_child <- df_tool_data %>% 
   filter(protection_services_for_child_violence == "yes", protection_services_for_child_physical_harm == "no"
@@ -411,11 +372,8 @@ df_c_logic_protection_services_for_child <- df_tool_data %>%
   dplyr::select(starts_with("i.check")) %>% 
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
-if(exists("df_c_logic_protection_services_for_child")){
-  if(nrow(df_c_logic_protection_services_for_child) > 0){
-    logic_seperate_output$df_c_logic_protection_services_for_child <- df_c_logic_protection_services_for_child
-  }
-}
+add_checks_data_to_list(input_list_name = "logic_seperate_output", input_df_name = "df_c_logic_protection_services_for_child")
+
 # frequency_children_get_involved_in_harsh_work_32 ------------------------
 df_c_logic_children_get_involved_in_harsh_work_protection_risks <- df_tool_data %>% 
   filter(str_detect(string = str_c(c("child_labour"), collapse = " "),
@@ -439,11 +397,8 @@ df_c_logic_children_get_involved_in_harsh_work_protection_risks <- df_tool_data 
   dplyr::select(starts_with("i.check")) %>% 
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
-if(exists("df_c_logic_children_get_involved_in_harsh_work_protection_risks")){
-  if(nrow(df_c_logic_children_get_involved_in_harsh_work_protection_risks) > 0){
-    logic_seperate_output$df_c_logic_children_get_involved_in_harsh_work_protection_risks <- df_c_logic_children_get_involved_in_harsh_work_protection_risks
-  }
-}
+add_checks_data_to_list(input_list_name = "logic_seperate_output", input_df_name = "df_c_logic_children_get_involved_in_harsh_work_protection_risks")
+
 # # frequency_children_get_involved_in_harsh_work_mismatch_33 ------------------------
 # df_c_logic_children_get_involved_in_harsh_work_mismatch_33 <- df_tool_data %>%
 #   filter(!str_detect(string = str_c(c("child_labour"), collapse = " "),
@@ -466,11 +421,8 @@ if(exists("df_c_logic_children_get_involved_in_harsh_work_protection_risks")){
 #   dplyr::select(starts_with("i.check")) %>%
 #   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 # 
-# if(exists("df_c_logic_children_get_involved_in_harsh_work_mismatch_33")){
-#   if(nrow(df_c_logic_children_get_involved_in_harsh_work_mismatch_33) > 0){
-#     logic_seperate_output$df_c_logic_children_get_involved_in_harsh_work_mismatch_33 <- df_c_logic_children_get_involved_in_harsh_work_mismatch_33
-#   }
-# }
+# add_checks_data_to_list(input_list_name = "logic_seperate_output", input_df_name = "df_c_logic_children_get_involved_in_harsh_work_mismatch_33")
+
 # child_protection_risks_concerned_about_sexual_violence_34 ------------------------
 # correction: (child_experience_sexual_violence:child_experienced_sexual_violence)
 df_c_logic_child_protection_risks_concerned_about_sexual_violence <- df_tool_data %>% 
@@ -495,11 +447,8 @@ df_c_logic_child_protection_risks_concerned_about_sexual_violence <- df_tool_dat
   dplyr::select(starts_with("i.check")) %>% 
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
-if(exists("df_c_logic_child_protection_risks_concerned_about_sexual_violence")){
-  if(nrow(df_c_logic_child_protection_risks_concerned_about_sexual_violence) > 0){
-    logic_seperate_output$df_c_logic_child_protection_risks_concerned_about_sexual_violence <- df_c_logic_child_protection_risks_concerned_about_sexual_violence
-  }
-}
+add_checks_data_to_list(input_list_name = "logic_seperate_output", input_df_name = "df_c_logic_child_protection_risks_concerned_about_sexual_violence")
+
 # child_protection_risks_concerned_about_separated_from_parents_35 ------------------------
 df_c_logic_child_protection_risks_concerned_about_separated_from_parents <- df_tool_data %>% 
   filter(!str_detect(string = str_c(c("separation_from_family_members"), collapse = " "),
@@ -523,11 +472,8 @@ df_c_logic_child_protection_risks_concerned_about_separated_from_parents <- df_t
   dplyr::select(starts_with("i.check")) %>% 
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
-if(exists("df_c_logic_child_protection_risks_concerned_about_separated_from_parents")){
-  if(nrow(df_c_logic_child_protection_risks_concerned_about_separated_from_parents) > 0){
-    logic_seperate_output$df_c_logic_child_protection_risks_concerned_about_separated_from_parents <- df_c_logic_child_protection_risks_concerned_about_separated_from_parents
-  }
-}
+add_checks_data_to_list(input_list_name = "logic_seperate_output", input_df_name = "df_c_logic_child_protection_risks_concerned_about_separated_from_parents")
+
 # child_protection_risks_concerned_about_violence_36 ------------------------
 df_c_logic_child_protection_risks_concerned_about_violence <- df_tool_data %>% 
   filter(!str_detect(string = str_c(c("physical_violence"), collapse = " "),
@@ -552,11 +498,8 @@ df_c_logic_child_protection_risks_concerned_about_violence <- df_tool_data %>%
   dplyr::select(starts_with("i.check")) %>% 
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
-if(exists("df_c_logic_child_protection_risks_concerned_about_violence")){
-  if(nrow(df_c_logic_child_protection_risks_concerned_about_violence) > 0){
-    logic_seperate_output$df_c_logic_child_protection_risks_concerned_about_violence <- df_c_logic_child_protection_risks_concerned_about_violence
-  }
-}
+add_checks_data_to_list(input_list_name = "logic_seperate_output", input_df_name = "df_c_logic_child_protection_risks_concerned_about_violence")
+
 # okay_parents_arrange_child_marriage_37 ----------------------------------
 df_c_logic_okay_parents_arrange_child_marriage_mismatch <- df_tool_data %>% 
   filter(
@@ -580,11 +523,8 @@ df_c_logic_okay_parents_arrange_child_marriage_mismatch <- df_tool_data %>%
   dplyr::select(starts_with("i.check")) %>% 
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
-if(exists("df_c_logic_okay_parents_arrange_child_marriage_mismatch")){
-  if(nrow(df_c_logic_okay_parents_arrange_child_marriage_mismatch) > 0){
-    logic_seperate_output$df_c_logic_okay_parents_arrange_child_marriage_mismatch <- df_c_logic_okay_parents_arrange_child_marriage_mismatch
-  }
-}
+add_checks_data_to_list(input_list_name = "logic_seperate_output", input_df_name = "df_c_logic_okay_parents_arrange_child_marriage_mismatch")
+
 # okay_parents_arrange_child_marriage_38 ----------------------------------
 df_c_logic_okay_parents_arrange_child_marriage_mismatch_38 <- df_tool_data %>% 
   filter(
@@ -608,11 +548,7 @@ df_c_logic_okay_parents_arrange_child_marriage_mismatch_38 <- df_tool_data %>%
   dplyr::select(starts_with("i.check")) %>% 
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
-if(exists("df_c_logic_okay_parents_arrange_child_marriage_mismatch_38")){
-  if(nrow(df_c_logic_okay_parents_arrange_child_marriage_mismatch_38) > 0){
-    logic_seperate_output$df_c_logic_okay_parents_arrange_child_marriage_mismatch_38 <- df_c_logic_okay_parents_arrange_child_marriage_mismatch_38
-  }
-}
+add_checks_data_to_list(input_list_name = "logic_seperate_output", input_df_name = "df_c_logic_okay_parents_arrange_child_marriage_mismatch_38")
 
 # combined seperate logical checks ----------------------------------------------------------
 
