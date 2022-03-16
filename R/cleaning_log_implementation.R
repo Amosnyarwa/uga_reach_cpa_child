@@ -12,7 +12,20 @@ c_types <- ifelse(str_detect(string = data_nms, pattern = "_other$"), "text", "g
 df_raw_data <- readxl::read_excel(path = "inputs/UGA2109_Cross_Sectoral_Child_Protection_Assessment_Child_Data.xlsx", sheet = "UGA2109_Cross-Sectoral Child...", col_types = c_types) %>%
   filter(assent_child == "yes", respondent_age > 11, respondent_age < 18, as_date(start) > as_date("2022-01-30"), 
          !str_detect(string = point_number, pattern = fixed('test', ignore_case = TRUE))
-  )
+  ) %>% 
+  rename(`if_selected_ngo_or_un_agency/medecins_sans_frontieres` = `if_selected_ngo_or_un_agency/médecins_sans_frontières`,
+         `causes_of_stress_among_caregivers/childrens_safety` = `causes_of_stress_among_caregivers/children’s_safety`,
+         `action_child_takes_when_told_to_do_harsh_work/i_tell_the_person_i_wont_do_it` = `action_child_takes_when_told_to_do_harsh_work/i_tell_the_person_i_won't_do_it`
+  ) %>% 
+  mutate(if_selected_ngo_or_un_agency = str_replace(string = if_selected_ngo_or_un_agency, pattern = "médecins_sans_frontières", replacement = "medecins_sans_frontieres"),
+         causes_of_stress_among_caregivers = str_replace(string = causes_of_stress_among_caregivers, pattern = "children’s_safety", replacement = "childrens_safety"),
+         action_child_takes_when_told_to_do_harsh_work = str_replace(string = action_child_takes_when_told_to_do_harsh_work, pattern = "i_tell_the_person_i_won't_do_it", replacement = "i_tell_the_person_i_wont_do_it")
+  ) %>% 
+  mutate(
+    refugee_settlement = ifelse(district_name == "kampala" & status == "refugee", district_name, refugee_settlement),
+    refugee_settlement_zone = ifelse(district_name == "kampala" & status == "refugee", sub_county_div, refugee_settlement_zone)
+  ) %>% 
+  select(-c(starts_with("...15")))
 # cleaning log
 df_cleaning_log <- read_csv("inputs/combined_checks_child.csv") %>% 
   mutate(adjust_log = ifelse(is.na(adjust_log), "apply_suggested_change", adjust_log)) %>%
@@ -21,7 +34,10 @@ df_cleaning_log <- read_csv("inputs/combined_checks_child.csv") %>%
   select(uuid, type, name, value, issue_id, sheet, index, relevant, issue)
 # survey tool
 df_survey <- readxl::read_excel("inputs/Child_Protection_Assessment_Child_Tool.xlsx", sheet = "survey")
-df_choices <- readxl::read_excel("inputs/Child_Protection_Assessment_Child_Tool.xlsx", sheet = "choices")
+df_choices <- readxl::read_excel("inputs/Child_Protection_Assessment_Child_Tool.xlsx", sheet = "choices") %>% 
+  mutate( name = str_replace(string = name, pattern = "médecins_sans_frontières", replacement = "medecins_sans_frontieres"),
+          name = str_replace(string = name, pattern = "children’s_safety", replacement = "childrens_safety"),
+          name = str_replace(string = name, pattern = "i_tell_the_person_i_won't_do_it", replacement = "i_tell_the_person_i_wont_do_it") )
 
 # find all new choices to add to choices sheet ----------------------------
 
@@ -116,7 +132,7 @@ for (cur_sm_col in sm_colnames) {
   df_handle_sm_data <- df_updated_data
 }
 
-df_final_cleaned_data <- df_handle_sm_data
+df_final_cleaned_data <- df_handle_sm_data %>% select(-c(starts_with("...15")))
 
 # write final modified data
 
