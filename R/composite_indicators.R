@@ -7,7 +7,7 @@ create_composite_indicators_cpa_child <- function(input_df) {
                                        refugee_settlement == "rhino" ~ "rhino_camp",
                                        TRUE ~ refugee_settlement),
       i.region = case_when(district_name %in% c("kampala") ~ "central",
-                           district_name %in% c("isingiro", "kamwenge", "kikuube", "kyegegwa") ~ "south_west"
+                           district_name %in% c("isingiro", "kamwenge", "kikuube", "kyegegwa") ~ "south_west",
                            TRUE ~ "west_nile"),
       i.location_type = case_when(district_name %in% c("kampala") ~ "urban",
                                   TRUE ~ "rural"),
