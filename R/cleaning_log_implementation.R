@@ -58,7 +58,6 @@ kbo <- kobold::kobold(survey = df_survey,
                       choices = df_choices, 
                       data = df_raw_data, 
                       cleaning = df_cleaning_log,
-                      risks_mentioned,
                       harm_mentioned,
                       child_age_info
 )
@@ -88,7 +87,6 @@ kbo_modified <- kobold::kobold(survey = df_survey %>% filter(name %in% colnames(
                                choices = df_choises_modified, 
                                data = df_raw_data_modified, 
                                cleaning = df_cleaning_log,
-                               risks_mentioned,
                                harm_mentioned,
                                child_age_info)
 kbo_cleaned <- kobold::kobold_cleaner(kbo_modified)
