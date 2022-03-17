@@ -29,9 +29,11 @@ df_raw_data <- readxl::read_excel(path = "inputs/UGA2109_Cross_Sectoral_Child_Pr
   mutate(across(.cols = everything(), .fns = ~ifelse(str_detect(string = ., pattern = fixed(pattern = "N/A", ignore_case = TRUE)), "NA", .)))
 # cleaning log
 df_cleaning_log <- read_csv("inputs/combined_checks_child.csv") %>% 
-  mutate(adjust_log = ifelse(is.na(adjust_log), "apply_suggested_change", adjust_log)) %>%
+  mutate(adjust_log = ifelse(is.na(adjust_log), "apply_suggested_change", adjust_log),
+         value = ifelse(is.na(value) & comment == "implement_logical_change", "blank", value)) %>%
   filter(adjust_log != "delete_log", !is.na(value), !is.na(uuid)) %>% 
-  mutate(sheet = NA, index = NA, relevant = NA) %>% 
+  mutate(value = ifelse(value == "blank" & comment == "implement_logical_change", NA, value),
+         sheet = NA, index = NA, relevant = NA) %>% 
   select(uuid, type, name, value, issue_id, sheet, index, relevant, issue)
 # survey tool
 df_survey <- readxl::read_excel("inputs/Child_Protection_Assessment_Child_Tool.xlsx", sheet = "survey")
