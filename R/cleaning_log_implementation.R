@@ -103,6 +103,7 @@ kbo_cleaned <- kobold::kobold_cleaner(kbo_modified)
 
 # handling Personally Identifiable Information(PII)
 input_vars_to_remove_from_data <- c("complainant_name",
+                                    "complainant_id",
                                     "respondent_telephone",
                                     "name_pers_recording",
                                     "geopoint",
