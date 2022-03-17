@@ -25,7 +25,8 @@ df_raw_data <- readxl::read_excel(path = "inputs/UGA2109_Cross_Sectoral_Child_Pr
     refugee_settlement = ifelse(district_name == "kampala" & status == "refugee", district_name, refugee_settlement),
     refugee_settlement_zone = ifelse(district_name == "kampala" & status == "refugee", sub_county_div, refugee_settlement_zone)
   ) %>% 
-  select(-c(starts_with("...15")))
+  select(-c(starts_with("...15"))) %>% 
+  mutate(across(.cols = everything(), .fns = ~ifelse(str_detect(string = ., pattern = fixed(pattern = "N/A", ignore_case = TRUE)), "NA", .)))
 # cleaning log
 df_cleaning_log <- read_csv("inputs/combined_checks_child.csv") %>% 
   mutate(adjust_log = ifelse(is.na(adjust_log), "apply_suggested_change", adjust_log)) %>%
