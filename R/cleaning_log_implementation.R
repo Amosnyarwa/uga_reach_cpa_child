@@ -136,7 +136,7 @@ for (cur_sm_col in sm_colnames) {
   df_handle_sm_data <- df_updated_data
 }
 
-df_final_cleaned_data <- df_handle_sm_data %>% select(-c(starts_with("...15")))
+df_final_cleaned_data <- df_handle_sm_data
 
 # write final modified data
 
