@@ -319,7 +319,8 @@ add_checks_data_to_list <- function(input_list_name, input_df_name) {
 # reuse cleaning steps to handle different datasets -----------------------
 
 implement_cleaning_support <- function(input_df_raw_data, input_df_survey, input_df_choices, input_df_cleaning_log, input_post_fix) {
-  # find all new choices to add to choices sheet ----------------------------
+  
+  # find all new choices to add to choices sheet
   
   # gather choice options based on unique choices list
   df_grouped_choices<- input_df_choices %>% 
@@ -339,7 +340,7 @@ implement_cleaning_support <- function(input_df_raw_data, input_df_survey, input
     distinct() %>% # to make sure there are no duplicates
     arrange(name)
   
-  # create kobold object ----------------------------------------------------
+  # create kobold object
   
   kbo <- kobold::kobold(survey = input_df_survey, 
                         choices = input_df_choices, 
