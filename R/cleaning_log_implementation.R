@@ -6,6 +6,18 @@ library(glue)
 # read data ---------------------------------------------------------------
 
 # tool data
+# sheets
+harm_mentioned = readxl::read_excel(path = "inputs/UGA2109_Cross_Sectoral_Child_Protection_Assessment_Child_Data.xlsx", sheet = "harm_mentioned") %>% 
+  select(-c("_index",	"_parent_table_name",	"_submission__id", "_submission__uuid",	"_submission__submission_time",	"_submission__validation_status", 
+            "_submission__notes",	"_submission__status",	"_submission__submitted_by",	"_submission__tags")) %>% 
+  mutate(across(.cols = everything(), .fns = ~ifelse(str_detect(string = ., pattern = fixed(pattern = "N/A", ignore_case = TRUE)), "NA", .)))
+
+child_age_info = readxl::read_excel(path = "inputs/UGA2109_Cross_Sectoral_Child_Protection_Assessment_Child_Data.xlsx", sheet = "child_age_info") %>% 
+  select(-c("_index",	"_parent_table_name",	"_submission__id", "_submission__uuid",	"_submission__submission_time",	"_submission__validation_status", 
+            "_submission__notes",	"_submission__status",	"_submission__submitted_by",	"_submission__tags")) %>% 
+  mutate(across(.cols = everything(), .fns = ~ifelse(str_detect(string = ., pattern = fixed(pattern = "N/A", ignore_case = TRUE)), "NA", .)))
+
+# main dataset
 data_nms <- names(readxl::read_excel(path = "inputs/UGA2109_Cross_Sectoral_Child_Protection_Assessment_Child_Data.xlsx", sheet = "UGA2109_Cross-Sectoral Child...", n_max = 100))
 c_types <- ifelse(str_detect(string = data_nms, pattern = "_other$"), "text", "guess")
 
@@ -21,12 +33,26 @@ df_raw_data <- readxl::read_excel(path = "inputs/UGA2109_Cross_Sectoral_Child_Pr
          causes_of_stress_among_caregivers = str_replace(string = causes_of_stress_among_caregivers, pattern = "children’s_safety", replacement = "childrens_safety"),
          action_child_takes_when_told_to_do_harsh_work = str_replace(string = action_child_takes_when_told_to_do_harsh_work, pattern = "i_tell_the_person_i_won't_do_it", replacement = "i_tell_the_person_i_wont_do_it")
   ) %>% 
-  mutate(
-    refugee_settlement = ifelse(district_name == "kampala" & status == "refugee", district_name, refugee_settlement),
-    refugee_settlement_zone = ifelse(district_name == "kampala" & status == "refugee", sub_county_div, refugee_settlement_zone)
+  mutate(refugee_settlement = ifelse(district_name == "kampala" & status == "refugee", district_name, refugee_settlement),
+         refugee_settlement_zone = ifelse(district_name == "kampala" & status == "refugee", sub_county_div, refugee_settlement_zone)
   ) %>% 
-  select(-c(starts_with("...15"))) %>% 
+  select(-c(starts_with("...15")), -c(starts_with("places_where_child_feels_most_at_risk"),
+                                      starts_with("how_protection_risks_influence_behaviour"),
+                                      starts_with("child_role_with_chronic_or_disability"),
+                                      "end_note",	"consent",	"hoh",	"introduction_to_caregiver",
+                                      "location",	"sex",	"age",	"introduction_to_child",	"arrival",
+                                      "edu_completed",	"hh_size",	"numfamily",	"children_for_mdd",
+                                      "num_children_for_mdd",	"children_school_aged",	"num_children_school_aged",
+                                      "demo_check",	"repeat_intro_one")) %>% 
   mutate(across(.cols = everything(), .fns = ~ifelse(str_detect(string = ., pattern = fixed(pattern = "N/A", ignore_case = TRUE)), "NA", .)))
+
+# join repeats to the main dataset
+df_raw_data_harm_mentioned <- df_raw_data %>% 
+  left_join(harm_mentioned, by = c("_index" = "_parent_index") ) 
+
+df_raw_data_child_age_info <- df_raw_data %>% 
+  left_join(child_age_info, by = c("_index" = "_parent_index") ) 
+
 # cleaning log
 df_cleaning_log <- read_csv("inputs/combined_checks_child.csv") %>% 
   mutate(adjust_log = ifelse(is.na(adjust_log), "apply_suggested_change", adjust_log),
@@ -42,103 +68,24 @@ df_choices <- readxl::read_excel("inputs/Child_Protection_Assessment_Child_Tool.
           name = str_replace(string = name, pattern = "children’s_safety", replacement = "childrens_safety"),
           name = str_replace(string = name, pattern = "i_tell_the_person_i_won't_do_it", replacement = "i_tell_the_person_i_wont_do_it") )
 
-# find all new choices to add to choices sheet ----------------------------
 
-# gather choice options based on unique choices list
-df_grouped_choices<- df_choices %>% 
-  group_by(list_name) %>% 
-  summarise(choice_options = paste(name, collapse = " : "))
+# handle datasets ---------------------------------------------------------
 
-# get new name and choice pairs to add to the choices sheet
-new_vars <- df_cleaning_log %>% 
-  filter(type %in% c("change_response", "add_option")) %>% 
-  left_join(df_survey, by = "name") %>% 
-  filter(str_detect(string = type.y, pattern = "select_one|select one|select_multiple|select multiple")) %>% 
-  separate(col = type.y, into = c("select_type", "list_name"), sep =" ", remove = TRUE, extra = "drop") %>% 
-  left_join(df_grouped_choices, by = "list_name") %>%
-  filter(!str_detect(string = choice_options, pattern = value ) ) %>%
-  rename(choice = value ) %>%
-  select(name, choice) %>%
-  distinct() %>% # to make sure there are no duplicates
-  arrange(name)
-
-# create kobold object ----------------------------------------------------
-harm_mentioned = readxl::read_excel(path = "inputs/UGA2109_Cross_Sectoral_Child_Protection_Assessment_Child_Data.xlsx", sheet = "harm_mentioned")
-child_age_info = readxl::read_excel(path = "inputs/UGA2109_Cross_Sectoral_Child_Protection_Assessment_Child_Data.xlsx", sheet = "child_age_info")
-
-kbo <- kobold::kobold(survey = df_survey, 
-                      choices = df_choices, 
-                      data = df_raw_data, 
-                      cleaning = df_cleaning_log,
-                      harm_mentioned,
-                      child_age_info
-)
-
-# modified choices for the survey tool
-df_choises_modified <- butteR:::xlsform_add_choices(kobold = kbo, new_choices = new_vars)
-
-# special treat for variables for select_multiple, we need to add the columns to the data itself
-df_survey_sm <- df_survey %>% 
-  mutate(q_type = case_when(str_detect(string = type, pattern = "select_multiple|select multiple") ~ "sm",
-                            str_detect(string = type, pattern = "select_one|select one") ~ "so",
-                            TRUE ~ type)) %>% 
-  select(name, q_type)
-
-# construct new columns for select multiple
-new_vars_sm <- new_vars %>% 
-  left_join(df_survey_sm, by = "name") %>% 
-  filter(q_type == "sm") %>% 
-  mutate(new_cols = paste0(name,"/",choice))
-
-# add new columns to the raw data
-df_raw_data_modified <- df_raw_data %>% 
-  butteR:::mutate_batch(nm = new_vars_sm$new_cols, value = F )
-
-# make some cleanup
-kbo_modified <- kobold::kobold(survey = df_survey %>% filter(name %in% colnames(df_raw_data_modified)), 
-                               choices = df_choises_modified, 
-                               data = df_raw_data_modified, 
-                               cleaning = df_cleaning_log,
-                               harm_mentioned,
-                               child_age_info)
-kbo_cleaned <- kobold::kobold_cleaner(kbo_modified)
-
-# handling Personally Identifiable Information(PII)
-input_vars_to_remove_from_data <- c("complainant_name",
-                                    "complainant_id",
-                                    "respondent_telephone",
-                                    "name_pers_recording",
-                                    "geopoint",
-                                    "_geopoint_latitude",
-                                    "_geopoint_longitude",
-                                    "_geopoint_altitude",
-                                    "_geopoint_precision")
-
-df_handle_pii <- kbo_cleaned$data %>% 
-  mutate(across(any_of(input_vars_to_remove_from_data), .fns = ~na_if(., .)))
-
-# handling added responses after starting data collection and added responses in the cleaning process
-
-sm_colnames <-  df_handle_pii %>% 
-  select(contains("/")) %>% 
-  colnames() %>% 
-  str_replace_all(pattern = "/.+", replacement = "") %>% 
-  unique()
-
-df_handle_sm_data <- df_handle_pii
-
-for (cur_sm_col in sm_colnames) {
-  df_updated_data <- df_handle_sm_data %>% 
-    mutate(
-      across(contains(paste0(cur_sm_col, "/")), .fns = ~ifelse(!is.na(!!sym(cur_sm_col)) & is.na(.) , FALSE, .)),
-      across(contains(paste0(cur_sm_col, "/")), .fns = ~ifelse(is.na(!!sym(cur_sm_col)), NA, .))
-    )
-  df_handle_sm_data <- df_updated_data
-}
-
-df_final_cleaned_data <- df_handle_sm_data
-
-# write final modified data
-
-write_csv(df_final_cleaned_data, file = paste0("outputs/", butteR::date_file_prefix(), "_clean_data_child.csv"))
-write_csv(df_final_cleaned_data, file = paste0("inputs/", "clean_data_child.csv"))
+# main dataset
+implement_cleaning_support(input_df_raw_data = df_raw_data, 
+                           input_df_survey = df_survey, 
+                           input_df_choices = df_choices, 
+                           input_df_cleaning_log = df_cleaning_log,
+                           input_post_fix = "main_data_child")
+# harm_mentioned
+implement_cleaning_support(input_df_raw_data = df_raw_data_harm_mentioned, 
+                           input_df_survey = df_survey, 
+                           input_df_choices = df_choices, 
+                           input_df_cleaning_log = df_cleaning_log,
+                           input_post_fix = "harm_mentioned_data_child")
+# child_age_info
+implement_cleaning_support(input_df_raw_data = df_raw_data_child_age_info, 
+                           input_df_survey = df_survey, 
+                           input_df_choices = df_choices, 
+                           input_df_cleaning_log = df_cleaning_log,
+                           input_post_fix = "child_age_info_data_child")
