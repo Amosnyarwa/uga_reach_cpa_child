@@ -76,7 +76,7 @@ implement_cleaning_support(input_df_raw_data = df_raw_data,
                            input_df_survey = df_survey, 
                            input_df_choices = df_choices, 
                            input_df_cleaning_log = df_cleaning_log,
-                           input_post_fix = "main_data_child")
+                           input_post_fix = "data_child")
 # harm_mentioned
 implement_cleaning_support(input_df_raw_data = df_raw_data_harm_mentioned, 
                            input_df_survey = df_survey, 

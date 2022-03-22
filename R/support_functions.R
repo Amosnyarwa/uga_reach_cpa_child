@@ -419,6 +419,7 @@ implement_cleaning_support <- function(input_df_raw_data, input_df_survey, input
 # analysis support --------------------------------------------------------
 
 analysis_support <- function(input_df_cleaned, input_df_ref_pop, input_df_host_pop, input_dap) {
+  
   # make composite indicator ------------------------------------------------
   
   df_with_composites <- create_composite_indicators_cpa_child(input_df = input_df_cleaned) %>% 
