@@ -45,6 +45,7 @@ df_child_age_info_analysis <- analysis_support(input_df_cleaned = df_child_age_i
 # merge analysis ----------------------------------------------------------
 
 full_analysis_long <- bind_rows(df_main_analysis, df_harm_mentioned_analysis, df_child_age_info_analysis)
+
 end <- Sys.time()
 
 print(paste("Time taken to run the script: ", end - start))
