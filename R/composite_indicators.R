@@ -18,7 +18,7 @@ create_composite_indicators_cpa_child <- function(input_df) {
                                     hoh_education %in% c("completed_primary", "incomplete_primary", "incomplete_secondary") ~ "low",
                                     hoh_education %in% c("completed_secondary", "incomplete_university", "incomplete_prof_degree", 
                                                                "incomplete_voc_training", "completed_voc_training", "incomplete_tertiary") ~ "middle",
-                                    hoh_education %in% c("completed_university", "completed_prof_degree") ~ "higher",
+                                    hoh_education %in% c("completed_tertiary", "completed_university", "completed_prof_degree") ~ "higher",
                                     hoh_education %in% c("other") ~ "other",
                                     TRUE ~ hoh_education
                                     )
