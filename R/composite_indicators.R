@@ -12,6 +12,8 @@ create_composite_indicators_cpa_child <- function(input_df) {
                            TRUE ~ "west_nile"),
       i.location_type = case_when(district_name %in% c("kampala") ~ "urban",
                                   TRUE ~ "rural"),
+      i.respondent_age = case_when(respondent_age < 15 ~ "age_12_14",
+                                   TRUE ~ "age_15_17"),
       i.education_level = case_when(hoh_education %in% c("no_formal_education") ~ "none",
                                     hoh_education %in% c("completed_primary", "incomplete_primary", "incomplete_secondary") ~ "low",
                                     hoh_education %in% c("completed_secondary", "incomplete_university", "incomplete_prof_degree", 
