@@ -4,6 +4,7 @@ create_composite_indicators_cpa_child <- function(input_df) {
   input_df %>% 
     mutate(
       i.refugee_settlement = case_when(district_name == "adjumani" & status == "refugee" ~ "adjumani", 
+                                       district_name == "kampala" & status == "refugee" ~ "kampala",
                                        refugee_settlement == "rhino" ~ "rhino_camp",
                                        TRUE ~ refugee_settlement),
       i.region = case_when(district_name %in% c("kampala") ~ "central",
