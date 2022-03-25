@@ -80,8 +80,7 @@ df_choices <- readxl::read_excel("inputs/Child_Protection_Assessment_Child_Tool.
 df_cleaned_data <- implement_cleaning_support(input_df_raw_data = df_raw_data, 
                                               input_df_survey = df_survey, 
                                               input_df_choices = df_choices, 
-                                              input_df_cleaning_log = df_cleaning_log,
-                                              input_post_fix = "data_child")
+                                              input_df_cleaning_log = df_cleaning_log)
 
 write_csv(df_cleaned_data, file = paste0("outputs/", butteR::date_file_prefix(), "_clean_data_child.csv"))
 
@@ -89,8 +88,7 @@ write_csv(df_cleaned_data, file = paste0("outputs/", butteR::date_file_prefix(),
 df_cleaned_harm_mentioned_data <- implement_cleaning_support(input_df_raw_data = df_raw_data_harm_mentioned, 
                                                              input_df_survey = df_survey, 
                                                              input_df_choices = df_choices, 
-                                                             input_df_cleaning_log = df_cleaning_log,
-                                                             input_post_fix = "harm_mentioned_data_child") %>% 
+                                                             input_df_cleaning_log = df_cleaning_log) %>% 
   select(cols_from_main_dataset, any_of(colnames(harm_mentioned)))
 
 write_csv(df_cleaned_harm_mentioned_data, file = paste0("outputs/", butteR::date_file_prefix(), "_clean_harm_mentioned_data_child.csv"))
@@ -99,8 +97,7 @@ write_csv(df_cleaned_harm_mentioned_data, file = paste0("outputs/", butteR::date
 df_cleaned_child_age_info_data <- implement_cleaning_support(input_df_raw_data = df_raw_data_child_age_info, 
                                                              input_df_survey = df_survey, 
                                                              input_df_choices = df_choices, 
-                                                             input_df_cleaning_log = df_cleaning_log,
-                                                             input_post_fix = "child_age_info_data_child") %>% 
+                                                             input_df_cleaning_log = df_cleaning_log) %>% 
   select(cols_from_main_dataset, any_of(colnames(child_age_info)))
 
 write_csv(df_cleaned_child_age_info_data, file = paste0("outputs/", butteR::date_file_prefix(), "_clean_child_age_info_data_child.csv"))
