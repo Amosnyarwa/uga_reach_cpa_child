@@ -7,6 +7,8 @@ source("R/support_functions.R")
 # read data ---------------------------------------------------------------
 
 # tool data
+cols_from_main_dataset <- c("start",   "end", "today", "instruction_note", "consent_caregiver", "assent_caregiver", "consent_child", "assent_child", "district_name", "enumerator_id", "point_number", "status", "refugee_settlement", "refugee_settlement_zone", "sub_county_div", "nationality", "nationality_other", "respondent_age", "responent_sex",    "_id",   "uuid",  "index")
+
 # sheets
 harm_mentioned = readxl::read_excel(path = "inputs/UGA2109_Cross_Sectoral_Child_Protection_Assessment_Child_Data.xlsx", sheet = "harm_mentioned") %>% 
   select(-c("_index",	"_parent_table_name",	"_submission__id", "_submission__uuid",	"_submission__submission_time",	"_submission__validation_status", 
@@ -73,20 +75,30 @@ df_choices <- readxl::read_excel("inputs/Child_Protection_Assessment_Child_Tool.
 # handle datasets ---------------------------------------------------------
 
 # main dataset
-implement_cleaning_support(input_df_raw_data = df_raw_data, 
-                           input_df_survey = df_survey, 
-                           input_df_choices = df_choices, 
-                           input_df_cleaning_log = df_cleaning_log,
-                           input_post_fix = "data_child")
+df_cleaned_data <- implement_cleaning_support(input_df_raw_data = df_raw_data, 
+                                              input_df_survey = df_survey, 
+                                              input_df_choices = df_choices, 
+                                              input_df_cleaning_log = df_cleaning_log,
+                                              input_post_fix = "data_child")
+
+write_csv(df_cleaned_data, file = paste0("outputs/", butteR::date_file_prefix(), "_clean_data_child.csv"))
+
 # harm_mentioned
-implement_cleaning_support(input_df_raw_data = df_raw_data_harm_mentioned, 
-                           input_df_survey = df_survey, 
-                           input_df_choices = df_choices, 
-                           input_df_cleaning_log = df_cleaning_log,
-                           input_post_fix = "harm_mentioned_data_child")
+df_cleaned_harm_mentioned_data <- implement_cleaning_support(input_df_raw_data = df_raw_data_harm_mentioned, 
+                                                             input_df_survey = df_survey, 
+                                                             input_df_choices = df_choices, 
+                                                             input_df_cleaning_log = df_cleaning_log,
+                                                             input_post_fix = "harm_mentioned_data_child") %>% 
+  select(cols_from_main_dataset, any_of(colnames(harm_mentioned)))
+
+write_csv(df_cleaned_harm_mentioned_data, file = paste0("outputs/", butteR::date_file_prefix(), "_clean_harm_mentioned_data_child.csv"))
+
 # child_age_info
-implement_cleaning_support(input_df_raw_data = df_raw_data_child_age_info, 
-                           input_df_survey = df_survey, 
-                           input_df_choices = df_choices, 
-                           input_df_cleaning_log = df_cleaning_log,
-                           input_post_fix = "child_age_info_data_child")
+df_cleaned_child_age_info_data <- implement_cleaning_support(input_df_raw_data = df_raw_data_child_age_info, 
+                                                             input_df_survey = df_survey, 
+                                                             input_df_choices = df_choices, 
+                                                             input_df_cleaning_log = df_cleaning_log,
+                                                             input_post_fix = "child_age_info_data_child") %>% 
+  select(cols_from_main_dataset, any_of(colnames(child_age_info)))
+
+write_csv(df_cleaned_child_age_info_data, file = paste0("outputs/", butteR::date_file_prefix(), "_clean_child_age_info_data_child.csv"))
