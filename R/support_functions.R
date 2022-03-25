@@ -318,7 +318,7 @@ add_checks_data_to_list <- function(input_list_name, input_df_name) {
 
 # reuse cleaning steps to handle different datasets -----------------------
 
-implement_cleaning_support <- function(input_df_raw_data, input_df_survey, input_df_choices, input_df_cleaning_log, input_post_fix) {
+implement_cleaning_support <- function(input_df_raw_data, input_df_survey, input_df_choices, input_df_cleaning_log) {
   
   # find all new choices to add to choices sheet
   
@@ -408,10 +408,6 @@ implement_cleaning_support <- function(input_df_raw_data, input_df_survey, input
   }
   
   df_final_cleaned_data <- df_handle_sm_data
-  
-  # write final modified data
-  
-  write_csv(df_final_cleaned_data, file = paste0("outputs/", butteR::date_file_prefix(), "_clean_", input_post_fix, ".csv"))
 }
 
 
