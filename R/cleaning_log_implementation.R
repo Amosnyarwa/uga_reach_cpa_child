@@ -7,7 +7,9 @@ source("R/support_functions.R")
 # read data ---------------------------------------------------------------
 
 # tool data
-cols_from_main_dataset <- c("start",   "end", "today", "instruction_note", "consent_caregiver", "assent_caregiver", "consent_child", "assent_child", "district_name", "enumerator_id", "point_number", "status", "refugee_settlement", "refugee_settlement_zone", "sub_county_div", "nationality", "nationality_other", "respondent_age", "responent_sex",    "_id",   "uuid",  "index")
+cols_from_main_dataset <- c("start",   "end", "today", "instruction_note", "consent_caregiver", "assent_caregiver", "consent_child", 
+                            "assent_child", "district_name", "enumerator_id", "point_number", "status", "refugee_settlement", "refugee_settlement_zone", 
+                            "sub_county_div", "nationality", "nationality_other", "respondent_age", "responent_sex",    "_id",   "uuid",  "index")
 
 # sheets
 harm_mentioned = readxl::read_excel(path = "inputs/UGA2109_Cross_Sectoral_Child_Protection_Assessment_Child_Data.xlsx", sheet = "harm_mentioned") %>% 
