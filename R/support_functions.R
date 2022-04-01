@@ -18,14 +18,16 @@ extract_other_data <- function(input_tool_data, input_survey, input_choices) {
   
   for (cln in others_colnames) {
     
-    current_parent_qn = str_replace_all(string = cln, pattern = "_other", replacement = "")
+    current_parent_qn = str_replace_all(string = cln, pattern = "_other$", replacement = "")
     
     df_filtered_data <- df_data %>% 
       select(-contains("/")) %>% 
       select(uuid, start_date, enumerator_id, district_name, point_number, other_text = cln, current_value = current_parent_qn) %>% 
       filter(!is.na(other_text), !other_text %in% c(" ", "NA")) %>% 
       mutate( other_name = cln, 
-              int.my_current_val_extract = ifelse(str_detect(current_value, "other\\b"), str_extract_all(string = current_value, pattern = "other\\b|[a-z]+._other\\b"), current_value),
+              int.my_current_val_extract = ifelse(str_detect(current_value, "\\bother\\b"), 
+                                                  str_extract_all(string = current_value, pattern = "\\bother\\b|\\w+_other\\b"), 
+                                                  current_value),
               value = "",
               parent_qn = current_parent_qn)
     df_other_response_data <- rbind(df_other_response_data, df_filtered_data)
@@ -58,7 +60,7 @@ extract_other_data <- function(input_tool_data, input_survey, input_choices) {
            reviewed = "",
            adjust_log = ""
     ) %>% 
-    filter(str_detect(string = current_value, pattern = "other\\b|[a-z]+._other\\b"))
+    filter(str_detect(string = current_value, pattern = "\\bother\\b|\\w+_other\\b"))
   
   # care for select_one and select_multiple (change_response, add_option, remove_option)
   output <- list()
@@ -124,7 +126,7 @@ extract_other_data_repeats <- function(input_repeat_data, input_survey, input_ch
   
   for (cln in others_colnames) {
     
-    current_parent_qn = str_replace_all(string = cln, pattern = "_other", replacement = "")
+    current_parent_qn = str_replace_all(string = cln, pattern = "_other$", replacement = "")
     
     df_filtered_data <- df_data %>% 
       select(-contains("/")) %>% 
@@ -132,7 +134,9 @@ extract_other_data_repeats <- function(input_repeat_data, input_survey, input_ch
              other_text = cln, current_value = current_parent_qn, index = `_index.y`) %>% 
       filter(!is.na(other_text), !other_text %in% c(" ", "NA")) %>% 
       mutate( other_name = cln, 
-              int.my_current_val_extract = ifelse(str_detect(current_value, "other\\b"), str_extract_all(string = current_value, pattern = "other\\b|[a-z]+._other\\b"), current_value),
+              int.my_current_val_extract = ifelse(str_detect(current_value, "\\bother\\b"), 
+                                                  str_extract_all(string = current_value, pattern = "\\bother\\b|\\w+_other\\b"), 
+                                                  current_value),
               value = "",
               parent_qn = current_parent_qn)
     df_other_response_data <- rbind(df_other_response_data, df_filtered_data)
@@ -166,7 +170,7 @@ extract_other_data_repeats <- function(input_repeat_data, input_survey, input_ch
            reviewed = "",
            adjust_log = ""
     ) %>% 
-    filter(str_detect(string = current_value, pattern = "other\\b|[a-z]+._other\\b"))
+    filter(str_detect(string = current_value, pattern = "\\bother\\b|\\w+_other\\b"))
   
   # care for select_one and select_multiple (change_response, add_option, remove_option)
   output <- list()
