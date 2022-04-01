@@ -51,6 +51,87 @@ df_sample_data <- sf::st_read("inputs/cpa_child_settlement_host_samples.gpkg", q
 
 logic_output <- list()
 
+# check duplicate uuids ---------------------------------------------------
+
+df_c_duplicate_uuid <-  check_duplicates_by_uuid(input_tool_data = df_tool_data)
+
+add_checks_data_to_list(input_list_name = "logic_output", input_df_name = "df_c_duplicate_uuid")
+
+# check outliers ---------------------------------------------------
+
+# check respondent_age
+df_c_outliers_respondent_age <-  check_outliers(input_tool_data = df_tool_data,
+                                                input_column = "respondent_age", 
+                                                input_lower_limit = quantile(df_tool_data$respondent_age, 0.01, na.rm = TRUE),
+                                                input_upper_limit = quantile(df_tool_data$respondent_age, 0.99, na.rm = TRUE))
+
+add_checks_data_to_list(input_list_name = "logic_output", input_df_name = "df_c_outliers_respondent_age")
+
+# hh_size_children
+df_c_outliers_hh_size_children <-  check_outliers(input_tool_data = df_tool_data,
+                                                input_column = "hh_size_children", 
+                                                input_lower_limit = quantile(df_tool_data$hh_size_children, 0.01, na.rm = TRUE),
+                                                input_upper_limit = quantile(df_tool_data$hh_size_children, 0.99, na.rm = TRUE))
+
+add_checks_data_to_list(input_list_name = "logic_output", input_df_name = "df_c_outliers_hh_size_children")
+
+# twelve_to_seventeen_hh_size
+df_c_outliers_twelve_to_seventeen_hh_size <-  check_outliers(input_tool_data = df_tool_data,
+                                                input_column = "twelve_to_seventeen_hh_size", 
+                                                input_lower_limit = quantile(df_tool_data$twelve_to_seventeen_hh_size, 0.01, na.rm = TRUE),
+                                                input_upper_limit = quantile(df_tool_data$twelve_to_seventeen_hh_size, 0.99, na.rm = TRUE))
+
+add_checks_data_to_list(input_list_name = "logic_output", input_df_name = "df_c_outliers_twelve_to_seventeen_hh_size")
+
+# hh_size_adults
+df_c_outliers_hh_size_adults <-  check_outliers(input_tool_data = df_tool_data,
+                                                input_column = "hh_size_adults", 
+                                                input_lower_limit = quantile(df_tool_data$hh_size_adults, 0.01, na.rm = TRUE),
+                                                input_upper_limit = quantile(df_tool_data$hh_size_adults, 0.99, na.rm = TRUE))
+
+add_checks_data_to_list(input_list_name = "logic_output", input_df_name = "df_c_outliers_respondent_age")
+
+# hoh_age
+df_c_outliers_hoh_age <-  check_outliers(input_tool_data = df_tool_data,
+                                                input_column = "hoh_age", 
+                                                input_lower_limit = quantile(df_tool_data$hoh_age, 0.01, na.rm = TRUE),
+                                                input_upper_limit = quantile(df_tool_data$hoh_age, 0.99, na.rm = TRUE))
+
+add_checks_data_to_list(input_list_name = "logic_output", input_df_name = "df_c_outliers_hoh_age")
+
+# number_children
+df_c_outliers_number_children <-  check_outliers(input_tool_data = df_tool_data,
+                                                input_column = "number_children", 
+                                                input_lower_limit = quantile(df_tool_data$number_children, 0.01, na.rm = TRUE),
+                                                input_upper_limit = quantile(df_tool_data$number_children, 0.99, na.rm = TRUE))
+
+add_checks_data_to_list(input_list_name = "logic_output", input_df_name = "df_c_outliers_number_children")
+
+# hrs_child_perfoms_domestic_chores
+df_c_outliers_hrs_child_perfoms_domestic_chores <-  check_outliers(input_tool_data = df_tool_data,
+                                                input_column = "hrs_child_perfoms_domestic_chores", 
+                                                input_lower_limit = quantile(df_tool_data$hrs_child_perfoms_domestic_chores, 0.01, na.rm = TRUE),
+                                                input_upper_limit = quantile(df_tool_data$hrs_child_perfoms_domestic_chores, 0.99, na.rm = TRUE))
+
+add_checks_data_to_list(input_list_name = "logic_output", input_df_name = "df_c_outliers_hrs_child_perfoms_domestic_chores")
+
+# hrs_child_perfoms_econ_labour
+df_c_outliers_hrs_child_perfoms_econ_labour <-  check_outliers(input_tool_data = df_tool_data,
+                                                input_column = "hrs_child_perfoms_econ_labour", 
+                                                input_lower_limit = quantile(df_tool_data$hrs_child_perfoms_econ_labour, 0.01, na.rm = TRUE),
+                                                input_upper_limit = quantile(df_tool_data$hrs_child_perfoms_econ_labour, 0.99, na.rm = TRUE))
+
+add_checks_data_to_list(input_list_name = "logic_output", input_df_name = "df_c_outliers_hrs_child_perfoms_econ_labour")
+
+# days_received_lessons_from_teacher
+df_c_outliers_days_received_lessons_from_teacher <-  check_outliers(input_tool_data = df_tool_data,
+                                                input_column = "days_received_lessons_from_teacher", 
+                                                input_lower_limit = quantile(df_tool_data$days_received_lessons_from_teacher, 0.01, na.rm = TRUE),
+                                                input_upper_limit = quantile(df_tool_data$days_received_lessons_from_teacher, 0.99, na.rm = TRUE))
+
+add_checks_data_to_list(input_list_name = "logic_output", input_df_name = "df_c_outliers_days_received_lessons_from_teacher")
+
+
 # Time checks -------------------------------------------------------------
 
 # Time interval for the survey
