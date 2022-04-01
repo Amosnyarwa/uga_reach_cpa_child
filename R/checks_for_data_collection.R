@@ -38,11 +38,7 @@ df_c_survey_time <-  check_survey_time(input_tool_data = df_tool_data,
                                        input_min_time = min_time_of_survey, 
                                        input_max_time = max_time_of_survey)
 
-if(exists("df_c_survey_time")){
-  if(nrow(df_c_survey_time) > 0){
-    logic_output$df_c_survey_time <- df_c_survey_time
-  }
-}
+add_checks_data_to_list(input_list_name = "logic_output", input_df_name = "df_c_survey_time")
 
 # check the time between surveys
 min_time_btn_surveys <- 5
@@ -50,11 +46,7 @@ min_time_btn_surveys <- 5
 df_c_time_btn_survey <- check_time_interval_btn_surveys(input_tool_data = df_tool_data,
                                                         input_min_time = min_time_btn_surveys)
 
-if(exists("df_c_time_btn_survey")){
-  if(nrow(df_c_time_btn_survey) > 0){
-    logic_output$df_c_time_btn_survey <- df_c_time_btn_survey
-  }
-}
+add_checks_data_to_list(input_list_name = "logic_output", input_df_name = "df_c_time_btn_survey")
 
 # Logical checks ----------------------------------------------------------
 
@@ -70,21 +62,13 @@ sample_pt_nos <- df_sample_data %>%
 df_c_duplicate_pt_nos <- check_duplicate_pt_numbers(input_tool_data = df_tool_data %>% filter(district_name != "kampala"),
                                                     input_sample_pt_nos_list = sample_pt_nos)
 
-if(exists("df_c_duplicate_pt_nos")){
-  if(nrow(df_c_duplicate_pt_nos) > 0){
-    logic_output$df_c_duplicate_pt_nos <- df_c_duplicate_pt_nos
-  }
-}
+add_checks_data_to_list(input_list_name = "logic_output", input_df_name = "df_c_duplicate_pt_nos")
 
 # pt id does not exist in sample
 df_c_pt_not_in_sample <- check_pt_number_not_in_samples(input_tool_data = df_tool_data %>% filter(district_name != "kampala"), 
                                                         input_sample_pt_nos_list = sample_pt_nos)
 
-if(exists("df_c_pt_not_in_sample")){
-  if(nrow(df_c_pt_not_in_sample) > 0){
-    logic_output$df_c_pt_not_in_sample <- df_c_pt_not_in_sample
-  }
-}
+add_checks_data_to_list(input_list_name = "logic_output", input_df_name = "df_c_pt_not_in_sample")
 
 # check for exceeded threshold distance
 
@@ -94,11 +78,7 @@ df_c_greater_thresh_distance <- check_threshold_distance(input_sample_data = df_
                                                          input_tool_data = df_tool_data %>% filter(district_name != "kampala"),
                                                          input_threshold_dist = threshold_dist)
 
-if(exists("df_c_greater_thresh_distance")){
-  if(nrow(df_c_greater_thresh_distance) > 0){
-    logic_output$df_c_greater_thresh_distance <- df_c_greater_thresh_distance
-  }
-}
+add_checks_data_to_list(input_list_name = "logic_output", input_df_name = "df_c_greater_thresh_distance")
 
 # combined logical checks ----------------------------------------------------------
 
