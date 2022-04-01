@@ -6,6 +6,12 @@ library(glue)
 
 source("R/support_functions.R")
 
+data_nms <- names(readxl::read_excel(path = "inputs/UGA2109_Cross_Sectoral_Child_Protection_Assessment_Child_Data.xlsx", sheet = "UGA2109_Cross-Sectoral Child...", n_max = 100))
+c_types <- ifelse(str_detect(string = data_nms, pattern = "_other$"), "text", "guess")
+
+data_nms_harm <- names(readxl::read_excel(path = "inputs/UGA2109_Cross_Sectoral_Child_Protection_Assessment_Child_Data.xlsx", sheet = "harm_mentioned", n_max = 100))
+c_types_harm <- ifelse(str_detect(string = data_nms_harm, pattern = "_other$"), "text", "guess")
+
 # read data 
 df_tool_data <- readxl::read_excel("inputs/UGA2109_Cross_Sectoral_Child_Protection_Assessment_Child_Data.xlsx") %>% 
   mutate(i.check.uuid = `_uuid`,
@@ -28,18 +34,20 @@ df_tool_data <- readxl::read_excel("inputs/UGA2109_Cross_Sectoral_Child_Protecti
                                       "demo_check",	"repeat_intro_one"))
 
 # repeats
-harm_mentioned = readxl::read_excel(path = "inputs/UGA2109_Cross_Sectoral_Child_Protection_Assessment_Child_Data.xlsx", sheet = "harm_mentioned") 
+harm_mentioned = readxl::read_excel(path = "inputs/UGA2109_Cross_Sectoral_Child_Protection_Assessment_Child_Data.xlsx", 
+                                    sheet = "harm_mentioned", col_types = c_types_harm) 
 
-child_age_info = readxl::read_excel(path = "inputs/UGA2109_Cross_Sectoral_Child_Protection_Assessment_Child_Data.xlsx", sheet = "child_age_info")
+child_age_info = readxl::read_excel(path = "inputs/UGA2109_Cross_Sectoral_Child_Protection_Assessment_Child_Data.xlsx", 
+                                    sheet = "child_age_info")
 
 # join repeats to the main dataset
 df_tool_data_harm_mentioned <- df_tool_data %>% 
   right_join(harm_mentioned, by = c("_uuid" = "_submission__uuid") ) %>% 
-  filter(is.na(`_uuid`)) 
+  filter(!is.na(`_uuid`)) 
 
 df_tool_data_child_age_info <- df_tool_data %>% 
   right_join(child_age_info, by = c("_uuid" = "_submission__uuid") ) %>% 
-  filter(is.na(`_uuid`)) 
+  filter(!is.na(`_uuid`)) 
 
 # tool
 df_survey <- readxl::read_excel("inputs/Child_Protection_Assessment_Child_Tool.xlsx", sheet = "survey")
