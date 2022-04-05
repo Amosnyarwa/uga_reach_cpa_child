@@ -42,12 +42,10 @@ child_age_info = readxl::read_excel(path = "inputs/UGA2109_Cross_Sectoral_Child_
 
 # join repeats to the main dataset
 df_tool_data_harm_mentioned <- df_tool_data %>% 
-  right_join(harm_mentioned, by = c("_uuid" = "_submission__uuid") ) %>% 
-  filter(!is.na(`_uuid`)) 
+  inner_join(harm_mentioned, by = c("_uuid" = "_submission__uuid") )
 
 df_tool_data_child_age_info <- df_tool_data %>% 
-  right_join(child_age_info, by = c("_uuid" = "_submission__uuid") ) %>% 
-  filter(!is.na(`_uuid`)) 
+  inner_join(child_age_info, by = c("_uuid" = "_submission__uuid") )
 
 # tool
 df_survey <- readxl::read_excel("inputs/Child_Protection_Assessment_Child_Tool.xlsx", sheet = "survey")
