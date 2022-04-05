@@ -57,12 +57,12 @@ df_raw_data <- readxl::read_excel(path = "inputs/UGA2109_Cross_Sectoral_Child_Pr
 
 # join repeats to the main dataset
 df_raw_data_harm_mentioned <- df_raw_data %>% 
-  inner_join(harm_mentioned, by = c("_uuid" = "_submission__uuid") )  %>% 
-  rename(`_index` = `_index.y`)
+  select(-`_index`) %>% 
+  inner_join(harm_mentioned, by = c("_uuid" = "_submission__uuid") )
 
 df_raw_data_child_age_info <- df_raw_data %>% 
-  inner_join(child_age_info, by = c("_uuid" = "_submission__uuid") )  %>% 
-  rename(`_index` = `_index.y`)
+  select(-`_index`) %>% 
+  inner_join(child_age_info, by = c("_uuid" = "_submission__uuid") ) 
 
 # cleaning log
 df_cleaning_log <- read_csv("inputs/combined_checks_child.csv") %>% 
