@@ -17,12 +17,12 @@ c_types_harm <- ifelse(str_detect(string = data_nms_harm, pattern = "_other$"), 
 
 harm_mentioned = readxl::read_excel(path = "inputs/UGA2109_Cross_Sectoral_Child_Protection_Assessment_Child_Data.xlsx", 
                                     sheet = "harm_mentioned", col_types = c_types_harm) %>% 
-  select(-c("_index",	"_parent_table_name",	"_submission__id", "_submission__uuid",	"_submission__submission_time",	"_submission__validation_status", 
+  select(-c("_parent_table_name",	"_submission__id",	"_submission__submission_time",	"_submission__validation_status", 
             "_submission__notes",	"_submission__status",	"_submission__submitted_by",	"_submission__tags")) %>% 
   mutate(across(.cols = everything(), .fns = ~ifelse(str_detect(string = ., pattern = fixed(pattern = "N/A", ignore_case = TRUE)), "NA", .)))
 
 child_age_info = readxl::read_excel(path = "inputs/UGA2109_Cross_Sectoral_Child_Protection_Assessment_Child_Data.xlsx", sheet = "child_age_info") %>% 
-  select(-c("_index",	"_parent_table_name",	"_submission__id", "_submission__uuid",	"_submission__submission_time",	"_submission__validation_status", 
+  select(-c("_parent_table_name",	"_submission__id",	"_submission__submission_time",	"_submission__validation_status", 
             "_submission__notes",	"_submission__status",	"_submission__submitted_by",	"_submission__tags")) %>% 
   mutate(across(.cols = everything(), .fns = ~ifelse(str_detect(string = ., pattern = fixed(pattern = "N/A", ignore_case = TRUE)), "NA", .)))
 
@@ -57,10 +57,12 @@ df_raw_data <- readxl::read_excel(path = "inputs/UGA2109_Cross_Sectoral_Child_Pr
 
 # join repeats to the main dataset
 df_raw_data_harm_mentioned <- df_raw_data %>% 
-  left_join(harm_mentioned, by = c("_index" = "_parent_index") ) 
+  inner_join(harm_mentioned, by = c("_uuid" = "_submission__uuid") )  %>% 
+  rename(`_index` = `_index.y`)
 
 df_raw_data_child_age_info <- df_raw_data %>% 
-  left_join(child_age_info, by = c("_index" = "_parent_index") ) 
+  inner_join(child_age_info, by = c("_uuid" = "_submission__uuid") )  %>% 
+  rename(`_index` = `_index.y`)
 
 # cleaning log
 df_cleaning_log <- read_csv("inputs/combined_checks_child.csv") %>% 
@@ -85,7 +87,7 @@ df_choices <- readxl::read_excel("inputs/Child_Protection_Assessment_Child_Tool.
 df_cleaned_data <- implement_cleaning_support(input_df_raw_data = df_raw_data, 
                                               input_df_survey = df_survey, 
                                               input_df_choices = df_choices, 
-                                              input_df_cleaning_log = df_cleaning_log)
+                                              input_df_cleaning_log = df_cleaning_log %>% filter(name %in% colnames(df_raw_data)))
 
 write_csv(df_cleaned_data, file = paste0("outputs/", butteR::date_file_prefix(), "_clean_data_child.csv"))
 
