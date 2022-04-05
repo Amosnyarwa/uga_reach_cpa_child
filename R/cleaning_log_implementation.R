@@ -12,18 +12,19 @@ cols_from_main_dataset <- c("start",   "end", "today", "instruction_note", "cons
                             "sub_county_div", "nationality", "nationality_other", "respondent_age", "responent_sex",    "_id",   "uuid",  "index")
 
 # sheets
+data_cols_to_remove <- c("_parent_table_name",	"_submission__id",	"_submission__submission_time",	"_submission__validation_status", 
+                         "_submission__notes",	"_submission__status",	"_submission__submitted_by",	"_submission__tags")
+
 data_nms_harm <- names(readxl::read_excel(path = "inputs/UGA2109_Cross_Sectoral_Child_Protection_Assessment_Child_Data.xlsx", sheet = "harm_mentioned", n_max = 100))
 c_types_harm <- ifelse(str_detect(string = data_nms_harm, pattern = "_other$"), "text", "guess")
 
 harm_mentioned = readxl::read_excel(path = "inputs/UGA2109_Cross_Sectoral_Child_Protection_Assessment_Child_Data.xlsx", 
                                     sheet = "harm_mentioned", col_types = c_types_harm) %>% 
-  select(-c("_parent_table_name",	"_submission__id",	"_submission__submission_time",	"_submission__validation_status", 
-            "_submission__notes",	"_submission__status",	"_submission__submitted_by",	"_submission__tags")) %>% 
+  select(-all_of(data_cols_to_remove)) %>% 
   mutate(across(.cols = everything(), .fns = ~ifelse(str_detect(string = ., pattern = fixed(pattern = "N/A", ignore_case = TRUE)), "NA", .)))
 
 child_age_info = readxl::read_excel(path = "inputs/UGA2109_Cross_Sectoral_Child_Protection_Assessment_Child_Data.xlsx", sheet = "child_age_info") %>% 
-  select(-c("_parent_table_name",	"_submission__id",	"_submission__submission_time",	"_submission__validation_status", 
-            "_submission__notes",	"_submission__status",	"_submission__submitted_by",	"_submission__tags")) %>% 
+  select(-all_of(data_cols_to_remove)) %>% 
   mutate(across(.cols = everything(), .fns = ~ifelse(str_detect(string = ., pattern = fixed(pattern = "N/A", ignore_case = TRUE)), "NA", .)))
 
 # main dataset
