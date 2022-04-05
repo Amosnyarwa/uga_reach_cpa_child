@@ -32,7 +32,7 @@ data_nms <- names(readxl::read_excel(path = "inputs/UGA2109_Cross_Sectoral_Child
 c_types <- ifelse(str_detect(string = data_nms, pattern = "_other$"), "text", "guess")
 
 df_raw_data <- readxl::read_excel(path = "inputs/UGA2109_Cross_Sectoral_Child_Protection_Assessment_Child_Data.xlsx", sheet = "UGA2109_Cross-Sectoral Child...", col_types = c_types) %>%
-  filter(assent_child == "yes", respondent_age > 11, respondent_age < 18, as_date(start) > as_date("2022-01-30"), 
+  filter(assent_child == "yes", respondent_age > 11, respondent_age < 18, as_date(as_datetime(start)) > as_date("2022-01-30"), 
          !str_detect(string = point_number, pattern = fixed('test', ignore_case = TRUE))
   ) %>% 
   rename(`if_selected_ngo_or_un_agency/medecins_sans_frontieres` = `if_selected_ngo_or_un_agency/médecins_sans_frontières`,
@@ -54,7 +54,8 @@ df_raw_data <- readxl::read_excel(path = "inputs/UGA2109_Cross_Sectoral_Child_Pr
                                       "edu_completed",	"hh_size",	"numfamily",	"children_for_mdd",
                                       "num_children_for_mdd",	"children_school_aged",	"num_children_school_aged",
                                       "demo_check",	"repeat_intro_one")) %>% 
-  mutate(across(.cols = everything(), .fns = ~ifelse(str_detect(string = ., pattern = fixed(pattern = "N/A", ignore_case = TRUE)), "NA", .)))
+  mutate(across(.cols = everything(), .fns = ~ifelse(str_detect(string = ., pattern = fixed(pattern = "N/A", ignore_case = TRUE)), "NA", .))) %>% 
+  mutate(start = as_datetime(start), end = as_datetime(end), today = as_date(as_datetime(today)), date_arrival = as_date(as_datetime(date_arrival)))
 
 # join repeats to the main dataset
 df_raw_data_harm_mentioned <- df_raw_data %>% 
