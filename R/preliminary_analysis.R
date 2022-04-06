@@ -75,17 +75,10 @@ df_ref_harm_mentioned <- df_with_composites_harm_mentioned %>%
 df_host_harm_mentioned <- df_with_composites_harm_mentioned %>% 
   filter(status == "host_community")
 
-# attach weights
-df_ref_with_weights_harm_mentioned <- df_ref_harm_mentioned %>% 
-  left_join(df_ref_with_weights %>% select(uuid, strata, weights), by = "uuid")
-
-df_host_with_weights_harm_mentioned <- df_host_harm_mentioned %>% 
-  left_join(df_host_with_weights %>% select(uuid, strata, weights), by = "uuid")
-
 # set up design objects
 
-ref_svy_harm_mentioned <- as_survey(.data = df_ref_with_weights_harm_mentioned, strata = strata, weights = weights )
-host_svy_harm_mentioned <- as_survey(.data = df_host_with_weights_harm_mentioned, strata = strata, weights = weights )
+ref_svy_harm_mentioned <- as_survey(.data = df_ref_harm_mentioned)
+host_svy_harm_mentioned <- as_survey(.data = df_host_harm_mentioned)
 
 df_harm_mentioned_analysis <- analysis_support_after_survey_creation(input_ref_svy = ref_svy_harm_mentioned,
                                                input_host_svy = host_svy_harm_mentioned,
