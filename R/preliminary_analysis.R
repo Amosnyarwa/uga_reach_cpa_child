@@ -66,7 +66,7 @@ df_main_analysis <- analysis_support_after_survey_creation(input_ref_svy = ,
 
 # harm_mentioned: prepare data and create survey ------------------------------------------------
 
-df_with_composites_harm_mentioned <- create_composite_indicators_cpa_child(input_df = df_harm_mentioned)
+df_with_composites_harm_mentioned <- create_composite_indicators_cpa_child_repeats(input_df = df_harm_mentioned)
 
 # split data into host and refugee
 df_ref_harm_mentioned <- df_with_composites_harm_mentioned %>% 
@@ -94,7 +94,7 @@ df_harm_mentioned_analysis <- analysis_support_after_survey_creation(input_ref_s
 
 # child_age_info: prepare data and create survey ------------------------------------------------
 
-df_with_composites_child_age_info <- create_composite_indicators_cpa_child(input_df = df_child_age_info)
+df_with_composites_child_age_info <- create_composite_indicators_cpa_child_repeats(input_df = df_child_age_info)
 
 # split data into host and refugee
 df_ref_child_age_info <- df_with_composites_child_age_info %>% 
