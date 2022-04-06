@@ -12,13 +12,13 @@ source("R/support_functions.R")
 # load data ---------------------------------------------------------------
 
 df_cleaned <- read_csv("inputs/clean_data_child.csv")
-df_harm_mentioned = read_csv("inputs/clean_harm_mentioned_data_child.csv")
-df_child_age_info = read_csv("inputs/clean_child_age_info_data_child.csv")
+df_harm_mentioned <-  read_csv("inputs/clean_harm_mentioned_data_child.csv")
+df_child_age_info <-  read_csv("inputs/clean_child_age_info_data_child.csv")
 
 dap <- read_csv("inputs/r_dap_child.csv") %>% 
   janitor::clean_names()
 
-start<- Sys.time() 
+start <- Sys.time() 
 
 # load in individual level population data sets
 df_ref_pop <- read_csv("inputs/refugee_population_child.csv")
