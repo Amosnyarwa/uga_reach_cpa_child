@@ -21,7 +21,16 @@ create_composite_indicators_cpa_child <- function(input_df) {
                                     hoh_education %in% c("completed_tertiary", "completed_university", "completed_prof_degree") ~ "higher",
                                     hoh_education %in% c("other") ~ "other",
                                     TRUE ~ hoh_education
-                                    )
+                                    ),
+      int.date_arrival_interval = interval(as_date(date_arrival), today),
+      int.length_since_date_arrival = time_length(int.date_arrival_interval, "year"),
+      i.date_arrival = case_when(int.length_since_date_arrival <= 02.5 ~ "last_3_months",
+                                 int.length_since_date_arrival <= 0.5 ~ "3_and_6_month_ago",
+                                 int.length_since_date_arrival <= 1 ~ "6_month_1_yr_ago",
+                                 int.length_since_date_arrival <= 5 ~ "1_and_5_yrs_ago",
+                                 int.length_since_date_arrival <= 10 ~ "5_and_10_yrs_ago",
+                                 TRUE ~ "greater_10_yrs_ago"
+      )
     )
 }
 create_composite_indicators_cpa_child_repeats <- function(input_df) {
