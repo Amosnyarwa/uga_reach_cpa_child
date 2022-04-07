@@ -59,8 +59,8 @@ df_host_with_weights <- df_host %>%
 ref_svy <- as_survey(.data = df_ref_with_weights, strata = strata, weights = weights )
 host_svy <- as_survey(.data = df_host_with_weights, strata = strata, weights = weights )
 
-df_main_analysis <- analysis_support_after_survey_creation(input_ref_svy = ,
-                                                           input_host_svy = ,
+df_main_analysis <- analysis_support_after_survey_creation(input_ref_svy = ref_svy,
+                                                           input_host_svy = host_svy,
                                      input_dap = dap %>% filter(!variable %in% c("ages_for_minor",
                                                                                  "how_protection_risks_influence_behaviour",
                                                                                  "places_where_child_feels_most_at_risk")))
