@@ -97,17 +97,10 @@ df_ref_child_age_info <- df_with_composites_child_age_info %>%
 df_host_child_age_info <- df_with_composites_child_age_info %>% 
   filter(status == "host_community")
 
-# attach weights
-df_ref_with_weights_child_age_info <- df_ref_child_age_info %>% 
-  left_join(df_ref_with_weights %>% select(uuid, strata, weights), by = "uuid")
-
-df_host_with_weights_child_age_info <- df_host_child_age_info %>% 
-  left_join(df_host_with_weights %>% select(uuid, strata, weights), by = "uuid")
-
 # set up design objects
 
-ref_svy_child_age_info <- as_survey(.data = df_ref_with_weights_child_age_info, strata = strata, weights = weights )
-host_svy_child_age_info <- as_survey(.data = df_host_with_weights_child_age_info, strata = strata, weights = weights )
+ref_svy_child_age_info <- as_survey(.data = df_ref_child_age_info )
+host_svy_child_age_info <- as_survey(.data = df_host_child_age_info )
 
 
 df_child_age_info_analysis <- analysis_support_after_survey_creation(input_ref_svy = ref_svy_child_age_info,
