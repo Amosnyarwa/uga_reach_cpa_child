@@ -13,7 +13,8 @@ create_composite_indicators_cpa_child <- function(input_df) {
       i.location_type = case_when(district_name %in% c("kampala") ~ "urban",
                                   TRUE ~ "rural"),
       i.respondent_age = case_when(respondent_age < 15 ~ "age_12_14",
-                                   TRUE ~ "age_15_17"),
+                                   respondent_age < 18 ~ "age_15_17",
+                                   TRUE ~ "NA"),
       i.education_level = case_when(hoh_education %in% c("no_formal_education") ~ "none",
                                     hoh_education %in% c("completed_primary", "incomplete_primary", "incomplete_secondary") ~ "low",
                                     hoh_education %in% c("completed_secondary", "incomplete_university", "incomplete_prof_degree", 
@@ -29,7 +30,8 @@ create_composite_indicators_cpa_child <- function(input_df) {
                                  int.length_since_date_arrival <= 1 ~ "6_month_1_yr_ago",
                                  int.length_since_date_arrival <= 5 ~ "1_and_5_yrs_ago",
                                  int.length_since_date_arrival <= 10 ~ "5_and_10_yrs_ago",
-                                 TRUE ~ "greater_10_yrs_ago"
+                                 int.length_since_date_arrival > 10 ~ "greater_10_yrs_ago",
+                                 TRUE ~ "NA"
       )
     )
 }
@@ -46,6 +48,7 @@ create_composite_indicators_cpa_child_repeats <- function(input_df) {
       i.location_type = case_when(district_name %in% c("kampala") ~ "urban",
                                   TRUE ~ "rural"),
       i.respondent_age = case_when(respondent_age < 15 ~ "age_12_14",
-                                   TRUE ~ "age_15_17")
+                                   respondent_age < 18 ~ "age_15_17",
+                                   TRUE ~ "NA")
     )
 }
