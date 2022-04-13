@@ -55,8 +55,7 @@ df_raw_data <- readxl::read_excel(path = "inputs/UGA2109_Cross_Sectoral_Child_Pr
                                       "num_children_for_mdd",	"children_school_aged",	"num_children_school_aged",
                                       "demo_check",	"repeat_intro_one")) %>% 
   mutate(across(.cols = everything(), .fns = ~ifelse(str_detect(string = ., pattern = fixed(pattern = "N/A", ignore_case = TRUE)), "NA", .))) %>% 
-  mutate(start = as_datetime(start), end = as_datetime(end), today = as_date(as_datetime(today)), date_arrival = as_date(as_datetime(date_arrival))) %>% 
-  select(-c("child_bearing_status", "number_children"))
+  mutate(start = as_datetime(start), end = as_datetime(end), today = as_date(as_datetime(today)), date_arrival = as_date(as_datetime(date_arrival)))
 
 # join repeats to the main dataset
 df_raw_data_harm_mentioned <- df_raw_data %>% 
@@ -91,7 +90,8 @@ df_choices <- readxl::read_excel("inputs/Child_Protection_Assessment_Child_Tool.
 df_cleaned_data <- implement_cleaning_support(input_df_raw_data = df_raw_data, 
                                               input_df_survey = df_survey, 
                                               input_df_choices = df_choices, 
-                                              input_df_cleaning_log = df_cleaning_log %>% filter(name %in% colnames(df_raw_data)))
+                                              input_df_cleaning_log = df_cleaning_log %>% filter(name %in% colnames(df_raw_data))) %>% 
+  select(-c("child_bearing_status", "number_children"))
 
 write_csv(df_cleaned_data, file = paste0("outputs/", butteR::date_file_prefix(), "_clean_data_child.csv"))
 
@@ -125,5 +125,5 @@ list_of_clean_datasets <- list("UGA2109_Cross-Sectoral Child..." = df_cleaned_da
 
 openxlsx::write.xlsx(x = list_of_clean_datasets,
                      file = paste0("outputs/", butteR::date_file_prefix(), 
-                                   "_clean_data_caregiver.xlsx"), 
+                                   "_clean_data_child.xlsx"), 
                      overwrite = TRUE)
