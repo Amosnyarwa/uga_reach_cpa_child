@@ -23,9 +23,9 @@ harm_mentioned = readxl::read_excel(path = "inputs/UGA2109_Cross_Sectoral_Child_
   select(-all_of(data_cols_to_remove)) %>% 
   mutate(across(.cols = everything(), .fns = ~ifelse(str_detect(string = ., pattern = fixed(pattern = "N/A", ignore_case = TRUE)), "NA", .)))
 
-child_age_info = readxl::read_excel(path = "inputs/UGA2109_Cross_Sectoral_Child_Protection_Assessment_Child_Data.xlsx", sheet = "child_age_info") %>% 
-  select(-all_of(data_cols_to_remove)) %>% 
-  mutate(across(.cols = everything(), .fns = ~ifelse(str_detect(string = ., pattern = fixed(pattern = "N/A", ignore_case = TRUE)), "NA", .)))
+# child_age_info = readxl::read_excel(path = "inputs/UGA2109_Cross_Sectoral_Child_Protection_Assessment_Child_Data.xlsx", sheet = "child_age_info") %>% 
+#   select(-all_of(data_cols_to_remove)) %>% 
+#   mutate(across(.cols = everything(), .fns = ~ifelse(str_detect(string = ., pattern = fixed(pattern = "N/A", ignore_case = TRUE)), "NA", .)))
 
 # main dataset
 data_nms <- names(readxl::read_excel(path = "inputs/UGA2109_Cross_Sectoral_Child_Protection_Assessment_Child_Data.xlsx", sheet = "UGA2109_Cross-Sectoral Child...", n_max = 100))
@@ -62,9 +62,9 @@ df_raw_data_harm_mentioned <- df_raw_data %>%
   select(-`_index`) %>% 
   inner_join(harm_mentioned, by = c("_uuid" = "_submission__uuid") )
 
-df_raw_data_child_age_info <- df_raw_data %>% 
-  select(-`_index`) %>% 
-  inner_join(child_age_info, by = c("_uuid" = "_submission__uuid") ) 
+# df_raw_data_child_age_info <- df_raw_data %>% 
+#   select(-`_index`) %>% 
+#   inner_join(child_age_info, by = c("_uuid" = "_submission__uuid") ) 
 
 # cleaning log
 df_cleaning_log <- read_csv("inputs/combined_checks_child.csv") %>% 
@@ -106,14 +106,23 @@ df_cleaned_harm_mentioned_data <- implement_cleaning_support(input_df_raw_data =
 
 write_csv(df_cleaned_harm_mentioned_data, file = paste0("outputs/", butteR::date_file_prefix(), "_clean_harm_mentioned_data_child.csv"))
 
-# child_age_info
-df_cleaning_log_child_age_info <- df_cleaning_log %>% 
-  filter(uuid %in% df_raw_data_child_age_info$`_uuid`, name %in% colnames(df_raw_data_child_age_info))
+# # child_age_info
+# df_cleaning_log_child_age_info <- df_cleaning_log %>% 
+#   filter(uuid %in% df_raw_data_child_age_info$`_uuid`, name %in% colnames(df_raw_data_child_age_info))
+# 
+# df_cleaned_child_age_info_data <- implement_cleaning_support(input_df_raw_data = df_raw_data_child_age_info, 
+#                                                              input_df_survey = df_survey, 
+#                                                              input_df_choices = df_choices, 
+#                                                              input_df_cleaning_log = df_cleaning_log_child_age_info) %>% # cleaning log has no data for cleaning in this sheet
+#   select(cols_from_main_dataset, any_of(colnames(child_age_info)))
+# 
+# write_csv(df_cleaned_child_age_info_data, file = paste0("outputs/", butteR::date_file_prefix(), "_clean_child_age_info_data_child.csv"))
 
-df_cleaned_child_age_info_data <- implement_cleaning_support(input_df_raw_data = df_raw_data_child_age_info, 
-                                                             input_df_survey = df_survey, 
-                                                             input_df_choices = df_choices, 
-                                                             input_df_cleaning_log = df_cleaning_log_child_age_info) %>% # cleaning log has no data for cleaning in this sheet
-  select(cols_from_main_dataset, any_of(colnames(child_age_info)))
+list_of_clean_datasets <- list("UGA2109_Cross-Sectoral Child..." = df_cleaned_data,
+                               "harm_mentioned" = df_cleaned_harm_mentioned_data
+)
 
-write_csv(df_cleaned_child_age_info_data, file = paste0("outputs/", butteR::date_file_prefix(), "_clean_child_age_info_data_child.csv"))
+openxlsx::write.xlsx(x = list_of_clean_datasets,
+                     file = paste0("outputs/", butteR::date_file_prefix(), 
+                                   "_clean_data_caregiver.xlsx"), 
+                     overwrite = TRUE)
