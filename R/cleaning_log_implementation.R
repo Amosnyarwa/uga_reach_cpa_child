@@ -55,7 +55,8 @@ df_raw_data <- readxl::read_excel(path = "inputs/UGA2109_Cross_Sectoral_Child_Pr
                                       "num_children_for_mdd",	"children_school_aged",	"num_children_school_aged",
                                       "demo_check",	"repeat_intro_one")) %>% 
   mutate(across(.cols = everything(), .fns = ~ifelse(str_detect(string = ., pattern = fixed(pattern = "N/A", ignore_case = TRUE)), "NA", .))) %>% 
-  mutate(start = as_datetime(start), end = as_datetime(end), today = as_date(as_datetime(today)), date_arrival = as_date(as_datetime(date_arrival)))
+  mutate(start = as_datetime(start), end = as_datetime(end), today = as_date(as_datetime(today)), date_arrival = as_date(as_datetime(date_arrival))) %>% 
+  select(-c("child_bearing_status", "number_children"))
 
 # join repeats to the main dataset
 df_raw_data_harm_mentioned <- df_raw_data %>% 
