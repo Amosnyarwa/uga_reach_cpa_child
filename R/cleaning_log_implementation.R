@@ -93,7 +93,26 @@ df_cleaned_data <- implement_cleaning_support(input_df_raw_data = df_raw_data,
                                               input_df_cleaning_log = df_cleaning_log %>% filter(name %in% colnames(df_raw_data))) %>% 
   select(-c("child_bearing_status", "number_children"))
 
-write_csv(df_cleaned_data, file = paste0("outputs/", butteR::date_file_prefix(), "_clean_data_child.csv"))
+df_cleaned_data_update_child_labour <- df_cleaned_data %>% 
+  mutate(int.child_domestic_labour = case_when(respondent_age <= 14 & child_perform_domestic_chores == "yes" & hrs_child_perfoms_domestic_chores >= 21 ~ "yes",
+                                               respondent_age <= 14 & child_perform_domestic_chores == "yes" & hrs_child_perfoms_domestic_chores < 21 ~ "no",
+                                               respondent_age >= 15 & child_perform_domestic_chores == "yes" ~ "no",
+                                               TRUE ~ "NA" ),
+         int.child_econ_labour = case_when(respondent_age <= 14 & child_perform_econ_labour == "yes" & hrs_child_perfoms_econ_labour < 14 ~ "no",
+                                           respondent_age <= 14 & child_perform_econ_labour == "yes" & hrs_child_perfoms_econ_labour >= 14 ~ "yes",
+                                           respondent_age >= 15 & child_perform_econ_labour == "yes" & hrs_child_perfoms_econ_labour < 43 ~ "no",
+                                           respondent_age >= 15 & child_perform_econ_labour == "yes" & hrs_child_perfoms_econ_labour >= 43 ~ "yes",
+                                           TRUE ~ "NA" ),
+         child_labour = case_when(int.child_domestic_labour == "yes" | int.child_econ_labour == "yes" ~ "yes",
+                                      int.child_domestic_labour == "no" & int.child_econ_labour == "no" ~ "no",
+                                      int.child_domestic_labour == "no" & int.child_econ_labour == "NA" ~ "no",
+                                      int.child_domestic_labour == "NA" & int.child_econ_labour == "no" ~ "no",
+                                      TRUE ~ "NA" )
+  ) %>% 
+  relocate(child_labour, .after = "hrs_child_perfoms_econ_labour") %>% 
+  select(-c("hrs_child_perfoms_domestic_chores", "hrs_child_perfoms_econ_labour"))
+
+write_csv(df_cleaned_data_update_child_labour, file = paste0("outputs/", butteR::date_file_prefix(), "_clean_data_child.csv"))
 
 # harm_mentioned
 df_cleaning_log_harm_mentioned <- df_cleaning_log %>% 
