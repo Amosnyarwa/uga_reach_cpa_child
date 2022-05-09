@@ -145,4 +145,4 @@ list_of_clean_datasets <- list("UGA2109_Cross-Sectoral Child..." = df_cleaned_da
 openxlsx::write.xlsx(x = list_of_clean_datasets,
                      file = paste0("outputs/", butteR::date_file_prefix(), 
                                    "_clean_data_child.xlsx"), 
-                     overwrite = TRUE)
+                     overwrite = TRUE, keepNA = TRUE, na.string = "NA")
