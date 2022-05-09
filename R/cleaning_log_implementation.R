@@ -138,7 +138,7 @@ write_csv(df_cleaned_harm_mentioned_data, file = paste0("outputs/", butteR::date
 # 
 # write_csv(df_cleaned_child_age_info_data, file = paste0("outputs/", butteR::date_file_prefix(), "_clean_child_age_info_data_child.csv"))
 
-list_of_clean_datasets <- list("UGA2109_Cross-Sectoral Child..." = df_cleaned_data,
+list_of_clean_datasets <- list("UGA2109_Cross-Sectoral Child..." = df_cleaned_data_update_child_labour,
                                "harm_mentioned" = df_cleaned_harm_mentioned_data
 )
 
