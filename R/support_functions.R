@@ -810,3 +810,67 @@ analysis_support_after_survey_creation <- function(input_ref_svy, input_host_svy
   
   bind_rows(outputs)
 }
+analysis_support_mofification_kampala <- function(input_df_cleaned, input_dap) {
+  
+  # make composite indicator ------------------------------------------------
+  
+  df_with_composites <- create_composite_indicators_cpa_child(input_df = input_df_cleaned) %>% 
+    mutate(strata = case_when(status == "refugee" ~ paste0(i.refugee_settlement, "_refugee"),
+                              status == "host_community" ~ paste0(i.region,"_host"),
+                              TRUE ~ status
+    ))
+  
+  # split data into host and refugee
+  
+  df_ref <- df_with_composites %>% 
+    filter(status == "refugee")
+  
+  # set up design objects
+  
+  ref_svy <- as_survey(.data = df_ref)
+
+  # store analyses
+  outputs <-list()
+  
+  # refugee -----------------------------------------------------------------
+  
+  dap_refugee <- input_dap %>% 
+    filter(subset_1 == "i.location_type", split %in% c("all", "refugee_only"))
+  
+  # no subsets
+  refugee_variables_no_subsets <- dap_refugee %>% 
+    pull(variable) %>% unique()
+  
+  # refugee overall, no additional subset
+  outputs$ref_overall <- butteR::survey_collapse(df = ref_svy,
+                                                 vars_to_analyze = refugee_variables_no_subsets) %>% 
+    mutate(population = "refugee_kampala")
+  
+  #  subsets
+  dap_refugee_subset1 <- input_dap %>%
+    filter( split %in%  c("all","refugee_only"), !is.na(subset_1))
+  
+  # refugee overall, subset 1
+  dap_refugee_subset_split <- dap_refugee_subset1 %>%
+    split(.$subset_1)
+  
+  ref_overall_subset1 <-list()
+  
+  for(i in seq_along(dap_refugee_subset_split)){
+    print(i)
+    subset_temp <- dap_refugee_subset_split[[i]]
+    subset_value <- unique(subset_temp$subset_1)
+    vars_temp <- subset_temp %>% pull(variable)
+    ref_overall_subset1[[subset_value]] <- butteR::survey_collapse(df = ref_svy,
+                                                                   vars_to_analyze = vars_temp ,
+                                                                   disag = c( subset_value)
+    )
+  }
+  
+  outputs$ref_overall_subset1 <- bind_rows(ref_overall_subset1) %>%
+    mutate(population = "refugee_kampala")
+  
+  # merge analysis ----------------------------------------------------------
+  
+  bind_rows(outputs)
+}
