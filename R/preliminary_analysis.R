@@ -11,11 +11,11 @@ source("R/support_functions.R")
 
 # load data ---------------------------------------------------------------
 
-df_cleaned_kampala <- read_csv("inputs/clean_data_child.csv")
-df_cleaned <- df_cleaned_kampala %>% 
+df_cleaned_with_kampala <- read_csv("inputs/clean_data_child.csv")
+df_cleaned <- df_cleaned_with_kampala %>% 
   filter(district_name != "kampala")
-df_harm_mentioned_kampala <-  read_csv("inputs/clean_harm_mentioned_data_child.csv")
-df_harm_mentioned <- df_harm_mentioned_kampala %>% 
+df_harm_mentioned_with_kampala <-  read_csv("inputs/clean_harm_mentioned_data_child.csv")
+df_harm_mentioned <- df_harm_mentioned_with_kampala %>% 
   filter(district_name != "kampala")
 # df_child_age_info <-  read_csv("inputs/clean_child_age_info_data_child.csv")
 
@@ -67,9 +67,9 @@ host_svy <- as_survey(.data = df_host_with_weights, strata = strata, weights = w
 
 df_main_analysis <- analysis_support_after_survey_creation(input_ref_svy = ref_svy,
                                                            input_host_svy = host_svy,
-                                     input_dap = dap %>% filter(!variable %in% c("ages_for_minor",
-                                                                                 "how_protection_risks_influence_behaviour",
-                                                                                 "places_where_child_feels_most_at_risk")))
+                                                           input_dap = dap %>% filter(!variable %in% c("ages_for_minor",
+                                                                                                       "how_protection_risks_influence_behaviour",
+                                                                                                       "places_where_child_feels_most_at_risk")))
 
 # harm_mentioned: prepare data and create survey ------------------------------------------------
 
@@ -88,9 +88,9 @@ ref_svy_harm_mentioned <- as_survey(.data = df_ref_harm_mentioned)
 host_svy_harm_mentioned <- as_survey(.data = df_host_harm_mentioned)
 
 df_harm_mentioned_analysis <- analysis_support_after_survey_creation(input_ref_svy = ref_svy_harm_mentioned,
-                                               input_host_svy = host_svy_harm_mentioned,
-                                               input_dap = dap %>% filter(variable %in% c("how_protection_risks_influence_behaviour",
-                                                                                          "places_where_child_feels_most_at_risk")))
+                                                                     input_host_svy = host_svy_harm_mentioned,
+                                                                     input_dap = dap %>% filter(variable %in% c("how_protection_risks_influence_behaviour",
+                                                                                                                "places_where_child_feels_most_at_risk")))
 
 # # child_age_info: prepare data and create survey ------------------------------------------------
 # 
@@ -113,6 +113,17 @@ df_harm_mentioned_analysis <- analysis_support_after_survey_creation(input_ref_s
 #                                                input_host_svy = host_svy_child_age_info,
 #                                                input_dap = dap %>% filter(variable %in% c("ages_for_minor")))
 
+
+#  analysis including kampala ---------------------------------------------
+
+df_main_analysis_with_kampala <- analysis_support_mofification_kampala(input_df_cleaned = df_cleaned_with_kampala,
+                                                                       input_dap = dap %>% filter(!variable %in% c("ages_for_minor",
+                                                                                                                   "how_protection_risks_influence_behaviour",
+                                                                                                                   "places_where_child_feels_most_at_risk")))
+
+df_harm_mentioned_analysis_with_kampala <- analysis_support_mofification_kampala(input_df_cleaned = df_harm_mentioned_with_kampala,
+                                                                                 input_dap = dap %>% filter(variable %in% c("how_protection_risks_influence_behaviour",
+                                                                                                                            "places_where_child_feels_most_at_risk")))
 # merge analysis ----------------------------------------------------------
 
 full_analysis_long <- bind_rows(df_main_analysis, df_harm_mentioned_analysis)
