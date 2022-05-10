@@ -11,8 +11,12 @@ source("R/support_functions.R")
 
 # load data ---------------------------------------------------------------
 
-df_cleaned <- read_csv("inputs/clean_data_child.csv")
-df_harm_mentioned <-  read_csv("inputs/clean_harm_mentioned_data_child.csv")
+df_cleaned_kampala <- read_csv("inputs/clean_data_child.csv")
+df_cleaned <- df_cleaned_kampala %>% 
+  filter(district_name != "kampala")
+df_harm_mentioned_kampala <-  read_csv("inputs/clean_harm_mentioned_data_child.csv")
+df_harm_mentioned <- df_harm_mentioned_kampala %>% 
+  filter(district_name != "kampala")
 # df_child_age_info <-  read_csv("inputs/clean_child_age_info_data_child.csv")
 
 dap <- read_csv("inputs/r_dap_child.csv") %>% 
