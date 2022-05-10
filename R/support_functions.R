@@ -810,15 +810,14 @@ analysis_support_after_survey_creation <- function(input_ref_svy, input_host_svy
   
   bind_rows(outputs)
 }
-analysis_support_mofification_kampala <- function(input_df_cleaned, input_dap) {
+analysis_support_mofification_kampala <- function(input_df_cleaned, input_dap, input_dataset = "main_dataset") {
   
   # make composite indicator ------------------------------------------------
-  
-  df_with_composites <- create_composite_indicators_cpa_child(input_df = input_df_cleaned) %>% 
-    mutate(strata = case_when(status == "refugee" ~ paste0(i.refugee_settlement, "_refugee"),
-                              status == "host_community" ~ paste0(i.region,"_host"),
-                              TRUE ~ status
-    ))
+  if (input_dataset == "main_dataset") {
+    df_with_composites <- create_composite_indicators_cpa_child(input_df = input_df_cleaned)
+  }else{
+    df_with_composites <- create_composite_indicators_cpa_child_repeats(input_df = input_df_cleaned) 
+  }
   
   # split data into host and refugee
   
@@ -848,7 +847,7 @@ analysis_support_mofification_kampala <- function(input_df_cleaned, input_dap) {
   
   #  subsets
   dap_refugee_subset1 <- input_dap %>%
-    filter( split %in%  c("all","refugee_only"), !is.na(subset_1))
+    filter(subset_1 == "i.location_type", split %in%  c("all","refugee_only"), !is.na(subset_1))
   
   # refugee overall, subset 1
   dap_refugee_subset_split <- dap_refugee_subset1 %>%
