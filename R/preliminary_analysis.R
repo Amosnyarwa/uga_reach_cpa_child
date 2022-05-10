@@ -25,7 +25,9 @@ dap <- read_csv("inputs/r_dap_child.csv") %>%
 start <- Sys.time() 
 
 # load in individual level population data sets
-df_ref_pop <- read_csv("inputs/refugee_population_child.csv")
+df_ref_pop_with_kampala <- read_csv("inputs/refugee_population_child.csv")
+df_ref_pop <- df_ref_pop_with_kampala %>% 
+  filter(strata != "kampala")
 df_host_pop <- read_csv("inputs/host_population_child.csv")
 
 # main: prepare data and create survey ------------------------------------------------
