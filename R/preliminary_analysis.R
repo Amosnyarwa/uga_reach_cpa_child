@@ -128,7 +128,7 @@ df_harm_mentioned_analysis_with_kampala <- analysis_support_mofification_kampala
                                                                                  input_dataset = "repeats_dataset")
 # merge analysis ----------------------------------------------------------
 
-full_analysis_long <- bind_rows(df_main_analysis, df_harm_mentioned_analysis)
+full_analysis_long <- bind_rows(df_main_analysis, df_harm_mentioned_analysis, df_main_analysis_with_kampala, df_harm_mentioned_analysis_with_kampala)
 
 end <- Sys.time()
 
