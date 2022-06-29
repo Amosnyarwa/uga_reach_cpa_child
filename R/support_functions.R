@@ -744,7 +744,7 @@ analysis_support_after_survey_creation <- function(input_ref_svy, input_host_svy
   
   #  subsets
   dap_refugee_subset1 <- input_dap %>%
-    filter( split %in%  c("all","refugee_only"), !is.na(subset_1))
+    filter(subset_1 != "i.location_type", split %in%  c("all","refugee_only"), !is.na(subset_1))
   
   # refugee overall, subset 1
   dap_refugee_subset_split <- dap_refugee_subset1 %>%
@@ -783,7 +783,7 @@ analysis_support_after_survey_creation <- function(input_ref_svy, input_host_svy
   
   # subsets
   dap_host_subset1 <- input_dap %>%
-    filter( split %in%  c("all", "host_only"), !is.na(subset_1))
+    filter(subset_1 != "i.location_type", split %in%  c("all", "host_only"), !is.na(subset_1))
   
   dap_host_subset_split <- dap_host_subset1 %>%
     split(.$subset_1)
