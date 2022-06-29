@@ -58,3 +58,28 @@ openxlsx::write.xlsx(x = list_of_prepared_datasets,
                                    "_UGA2109 - Cross-sectoral child protection assessment_child_data.xlsx"), 
                      overwrite = TRUE, keepNA = TRUE, na.string = "NA")
 
+# prepare analysis for publishing -----------------------------------------
+
+df_prepare_survey <- df_survey %>% 
+  select(type, name, label) %>% 
+  separate(col = type, into = c("select_type", "list_name"), sep =" ", remove = TRUE, extra = "drop" ) %>% 
+  filter(select_type %in% c("integer", "date", "text", "calculate", "select_one", "select_multiple"))
+
+df_prepare_analysis_output <- df_analysis_output %>% 
+  mutate(variable = ifelse(is.na(variable), variable_val, variable),
+         variable = ifelse(variable == "i.education_level", "hoh_education", variable),
+         int.variable = ifelse(str_detect(string = variable, pattern = "^i\\."), str_replace(string = variable, pattern = "^i\\.", replacement = ""), variable)) %>% 
+  left_join(df_prepare_survey, by = c("int.variable" = "name")) %>% 
+  relocate(label, .after = variable) %>% 
+  mutate(label = ifelse(is.na(label), variable, label),
+         `mean/pct` = ifelse(select_type %in% c("integer"), `mean/pct`, `mean/pct`*100),
+         `mean/pct` = round(`mean/pct`, digits = 2)) %>% 
+  select(`Question`= label, `choices/options` = variable_val, `Results(mean/percentage)` = `mean/pct`, population, subset_1_name, subset_1_val)
+
+
+list_of_output <- list("child" = df_prepare_analysis_output)
+
+openxlsx::write.xlsx(x = list_of_output,
+                     file = paste0("outputs/", butteR::date_file_prefix(), 
+                                   "_UGA2109 - Cross-sectoral child protection assessment_child_analysis.xlsx"), 
+                     overwrite = TRUE, keepNA = TRUE, na.string = "NA")
