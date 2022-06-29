@@ -18,6 +18,17 @@ df_analysis_output <- readr::read_csv("inputs/full_analysis_lf_child.csv")
 df_survey <- readxl::read_excel("inputs/Child_Protection_Assessment_Child_Tool.xlsx", sheet = "survey")
 df_choices <- readxl::read_excel("inputs/Child_Protection_Assessment_Child_Tool.xlsx", sheet = "choices")
 
+# feedback ----------------------------------------------------------------
+
+df_feedback_data <- df_clean_data %>% 
+  filter(interview_feedback %in% c("yes")) %>% 
+  select(interview_feedback:call_back_note)
+
+openxlsx::write.xlsx(x = df_feedback_data,
+                     file = paste0("outputs/", butteR::date_file_prefix(), 
+                                   "_ACTED_feedback_child.xlsx"), 
+                     overwrite = TRUE, keepNA = TRUE, na.string = "NA")
+
 # prepare data for publishing ---------------------------------------------
 
 # main
@@ -66,6 +77,7 @@ df_prepare_survey <- df_survey %>%
   filter(select_type %in% c("integer", "date", "text", "calculate", "select_one", "select_multiple"))
 
 df_prepare_analysis_output <- df_analysis_output %>% 
+  filter(!variable %in% child_indicators_to_remove) %>% 
   mutate(variable = ifelse(is.na(variable), variable_val, variable),
          variable = ifelse(variable == "i.education_level", "hoh_education", variable),
          int.variable = ifelse(str_detect(string = variable, pattern = "^i\\."), str_replace(string = variable, pattern = "^i\\.", replacement = ""), variable)) %>% 
@@ -73,7 +85,7 @@ df_prepare_analysis_output <- df_analysis_output %>%
   relocate(label, .after = variable) %>% 
   mutate(label = ifelse(is.na(label), variable, label),
          `mean/pct` = ifelse(select_type %in% c("integer"), `mean/pct`, `mean/pct`*100),
-         `mean/pct` = round(`mean/pct`, digits = 2)) %>% 
+         `mean/pct` = round(`mean/pct`, digits = 2)) %>%
   select(`Question`= label, `choices/options` = variable_val, `Results(mean/percentage)` = `mean/pct`, population, subset_1_name, subset_1_val)
 
 
