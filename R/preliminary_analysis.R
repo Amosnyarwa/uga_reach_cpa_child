@@ -60,6 +60,20 @@ host_weight_table <- make_host_weight_table(input_df_host = df_host,
 df_host_with_weights <- df_host %>% 
   left_join(host_weight_table, by = "strata")
 
+# output data with weights and composite indicators for publishing
+
+df_combined_data_with_weights <- bind_rows(df_ref_with_weights, df_host_with_weights) %>% 
+  select(c("uuid", "weights"), starts_with("i.") )
+
+openxlsx::write.xlsx(x = df_combined_data_with_weights,
+                     file = paste0("outputs/", butteR::date_file_prefix(), 
+                                   "_clean_data_child_with_weights.xlsx"), 
+                     overwrite = TRUE, keepNA = TRUE, na.string = "NA")
+
+openxlsx::write.xlsx(x = df_combined_data_with_weights,
+                     file = paste0("inputs/clean_data_child_with_weights.xlsx"), 
+                     overwrite = TRUE, keepNA = TRUE, na.string = "NA")
+
 # set up design objects
 
 ref_svy <- as_survey(.data = df_ref_with_weights, strata = strata, weights = weights )
