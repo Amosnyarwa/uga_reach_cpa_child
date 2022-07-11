@@ -52,7 +52,9 @@ child_indicators_to_remove <- c("child_experienced_sexual_violence",
                                 "perpetrator_of_child_violence",
                                 "perpetrator_of_child_violence_other",
                                 "causes_of_child_violence",
-                                "causes_of_child_violence_other")
+                                "causes_of_child_violence_other", 
+                                "child_perform_domestic_chores",
+                                "child_perform_econ_labour")
 
 audit_cols_to_remove <- c("deviceid", "audit", "audit_URL", "instance_name")
 
