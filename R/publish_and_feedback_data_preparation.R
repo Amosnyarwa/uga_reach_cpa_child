@@ -10,6 +10,7 @@ c_types <- ifelse(str_detect(string = data_nms, pattern = "_other$"), "text", "g
 
 df_clean_data <- readxl::read_excel(path = data_file, sheet = "UGA2109_Cross-Sectoral Child...", col_types = c_types)
 df_clean_data_harm_mentioned <- readxl::read_excel(path = data_file, sheet = "harm_mentioned")
+df_clean_data_with_weights <- readxl::read_excel(path = "inputs/clean_data_child_with_weights.xlsx")
 
 # read analysis output 
 df_analysis_output <- readr::read_csv("inputs/full_analysis_lf_child.csv")
@@ -53,11 +54,14 @@ child_indicators_to_remove <- c("child_experienced_sexual_violence",
                                 "causes_of_child_violence",
                                 "causes_of_child_violence_other")
 
+audit_cols_to_remove <- c("deviceid", "audit", "audit_URL", "instance_name")
+
 df_prepared_data_main <- df_clean_data %>% 
-  select(-c("interview_feedback":"call_back_note"), -starts_with(child_indicators_to_remove))
+  select(-c("interview_feedback":"call_back_note"), -starts_with(child_indicators_to_remove), -any_of(audit_cols_to_remove)) %>% 
+  left_join(df_clean_data_with_weights)
 
 df_prepared_data_harm_mentioned <- df_clean_data_harm_mentioned %>% 
-  select(-c("start":"responent_sex"))
+  select(-c("start":"responent_sex"), -any_of(audit_cols_to_remove))
 
 # writing output to excel
 
